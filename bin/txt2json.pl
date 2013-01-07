@@ -32,13 +32,13 @@ sub finish {
 
     my $sst = $cur{'@id'};
     $sites->{ $sst } = { %cur };
-    ($address, $hours, $info, $sep, %cur) = ("","","",0); 
+    ($address, $hours, $info, $sep, %cur) = ("","","",0,()); 
 }
 
 while(<>) {
     s/^\s+|\s+$//g;
 
-    if ($_ and $_ =~ qr{^([A-Z]+-[A-Za-z0-9-]+)?(@(.*))?$}) {
+    if ($_ and $_ =~ qr{^(ISIL [A-Z]+-[A-Za-z0-9-]+)?(@(.*))?$}) {
         my $sst = $1 // $isil // fail "Missing ISIL for identifier: $_";
         $sst = "http://uri.gbv.de/organization/isil/$sst";
         if ($3) {
