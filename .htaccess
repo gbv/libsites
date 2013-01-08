@@ -1,0 +1,19 @@
+AddHandler      cgi-script .cgi
+AddType         text/html  .cgi
+
+#DirectoryIndex  index.pl
+
+AddCharset      UTF-8       .html .json .txt
+AddType         text/plain  .ttl
+
+RewriteEngine On
+
+# do not rewrite existing files, directories, or symlinks
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-l
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# TODO: configure this
+RewriteBase /~voj/libsites
+
+RewriteRule ^(.*)$ ./bin/app.cgi/$1 [QSA,L]

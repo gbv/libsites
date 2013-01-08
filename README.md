@@ -28,4 +28,5 @@ Die weitere Steuerung ist bereits in `.htaccess`-Dateien hinterlegt.
 * Make
 * Perl >= 5.10.1
 * Perl CPAN modules JSON, File::Slurp
+* nodejs with package `jsonld`
 

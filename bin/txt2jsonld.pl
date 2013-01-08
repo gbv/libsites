@@ -84,8 +84,11 @@ if ($isil) {
     $sites->{$isil}->{'org:hasSite'} = \@has if @has;
 }
 
-my $json = to_json($sites, {pretty=>1, canonical=>1});
+my $jsonld = {
+    '@graph' => [
+        values %$sites
+    ]
+};
 
-print $json;
-
+print to_json( $jsonld, {pretty=>1, canonical=>1});
 

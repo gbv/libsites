@@ -9,5 +9,5 @@ normalize:
 
 .txt.json:
 	@echo $< to $@
-	@./bin/txt2json.pl $< > $@
+	@./bin/txt2jsonld.pl $< > $@
 	@./bin/normalize.pl $@
