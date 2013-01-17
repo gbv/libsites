@@ -37,6 +37,7 @@ sub finish {
 
 while(<>) {
     s/^\s+|\s+$//g;
+    next if /^#/; # comment
 
     if ($_ and $_ =~ qr{^(ISIL [A-Z]+-[A-Za-z0-9-]+)?(@(.*))?$}) {
         my $sst = $1 // $isil // fail "Missing ISIL for identifier: $_";

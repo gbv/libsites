@@ -1,15 +1,19 @@
 {
    "@context" : {
-      "dc" : "http://purl.org/dc/elements/1.1/",
-      "foaf" : "http://xmlns.com/foaf/0.1/",
-      "foaf:mbox" : {
-         "@type" : "@id"
-      },
-      "foaf:phone" : {
-         "@type" : "@id"
-      },
-      "gbv" : "http://purl.org/ontology/gbv/",
-      "geo" : "http://www.w3.org/2003/01/geo/wgs84_pos#",
-      "org" : "http://www.w3.org/ns/org#"
+      "daia"   : "http://purl.org/ontology/daia/",
+      "dbprop" : "http://dbpedia.org/property/",
+      "dc"     : "http://purl.org/dc/elements/1.1/",
+      "foaf"   : "http://xmlns.com/foaf/0.1/",
+      "frbr"   : "http://purl.org/vocab/frbr/core#",
+      "gbv"    : "http://purl.org/ontology/gbv/",
+      "geo"    : "http://www.w3.org/2003/01/geo/wgs84_pos#",
+      "org"    : "http://www.w3.org/ns/org#",
+      "owl"    : "http://www.w3.org/2002/07/owl#",
+      "vcard"  : "http://www.w3.org/2006/vcard/ns#",
+      "foaf:mbox"     : { "@type" : "@id" },
+      "foaf:phone"    : { "@type" : "@id" },
+      "foaf:homepage" : { "@type" : "@id" },
+      "owl:sameAs"    : { "@type" : "@id" },
+      "vcard:url"     : { "@type" : "@id" }
    }
 }
