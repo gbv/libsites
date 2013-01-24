@@ -26,7 +26,7 @@ PICA::Parser->new->parsefile( \*STDIN, Record => sub {
 
     my $rdf = {
         '@id' => "http://uri.gbv.de/organization/isil/$isil",
-        'dcterms:identifier' => (@moreisil ? [ $isil, @moreisil ] : $isil ),
+        'dc:identifier' => (@moreisil ? [ $isil, @moreisil ] : $isil ),
         'rdf:type' => [ 'daia:Institution', 'frbr:CorporateBody', 'foaf:Organization' ],
         'owl:sameAs' => "http://lobid.org/organisation/$isil", 
     };
