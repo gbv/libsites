@@ -1,0 +1,72 @@
+[% INCLUDE header.html title = uri.foaf_name %]
+[% SET isil = uri.dcterms_identifier %]
+<div itemscope itemtype="http://schema.org/[% isil ? "Library" : "Organization" %]" class="vcard">
+   <!--[% INCLUDE feedback_notify.html %]-->
+   <span style="display:none" itemprop="name" class="fn org">[% uri.foaf_name %]</span>
+   [% IF uri.geo_location %]
+    <div style="float:right; padding-left:1em;">
+     [% INCLUDE map.html location=uri.geo_location title=uri.foaf_name %]
+    </div>
+   [% END %]
+
+   <div>
+   [% IF isil %]
+    <p>
+     <abbr title="International Standard Identifier for Libraries and Related Organizations">ISIL</abbr>:
+     <a href="http://dispatch.opac.d-nb.de/DB=1.2/CMD?ACT=SRCHA&IKT=8529&TRM=$isil">$isil</a>
+    </p>
+   [% END %]
+   [% IF uri.dbprop_shortName %]
+    <p><b>Kurzbezeichnung:</b> [% uri.dbprop_shortName %]</p>
+   [% END %]
+   [% IF uri.hcterms_hasCard %]
+     [% INCLUDE vcard.html vcard=uri.hcterms_hasCard %]
+   [% ELSE %]
+     [% INCLUDE vcard.html vcard=uri %]
+   [% END %]
+   [% SET opac = uri.gbv_opac %] 
+   [% IF opac %]
+    [% IF opac.str.match('^http://uri.gbv.de/database/') %]
+     <h3><a href="$opac.href">Katalog</a></h3>
+    [% ELSE %]
+     <h3>Katalog</h3>
+    [% END %]
+    <p><a href="$opac.foaf_homepage.href">$opac.dcterms_title</a></p>
+    [% IF opac.gbv_dbkey or opac.gbv_srubase %]
+     <h3>Schnittstellen</h3>
+     <dl>
+      [% IF opac.gbv_dbkey %]
+       <dt class="inline">unAPI-key</dt>
+       <dd><code><a href="http://unapi.gbv.de/about">$opac.gbv_dbkey</a></code></dd>
+      [% END %]
+      [% IF opac.gbv_srubase %]
+       <dt class="inline"><abbr title="Search/Retrieval via URL">SRU</abbr></dt>
+       <dd><code><a href="$opac.gbv_srubase">$opac.gbv_srubase</a></code></dd>
+      [% END %]
+     </dl>
+    [% END %]
+   [% END %]
+   [% wikipedia=uri.foaf_isPrimaryTopicOf %]
+   [% IF wikipedia %]
+     <h3>Weitere Informationen</h3>
+     <p>Artikel in Wikipedia <a href="$wikipedia.href" title="Artikel in Wikipedia"><img src="$base/img/wikipedia30x30.png" width="30" height="30" border="0" /></a></p>
+   [% END %]
+
+   [% sites = uri.org_hasSite_ %]
+   [% IF sites.size %]
+    <h3>Standorte</h3>
+    <ul>
+      [% FOREACH site IN sites %]
+        <li>
+          <a href="[% site %]">[% IF site.foaf_name; site.foaf_name; ELSE; site; END %]</a>
+          [% IF site.gbv_address %]<br>[% site.gbv_address | replace('\n',' / ') %][% END %]
+          [% IF site.dc_description %]<br><em>[% site.dc_description %]</em>[% END %]
+        </li>
+      [% END %]
+    </ul>    
+   [% END %]
+
+   </div>
+</div>
+<br style="clear:both;" />
+[% INCLUDE footer.html %]

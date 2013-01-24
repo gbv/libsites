@@ -7,8 +7,8 @@ JSON=$(shell find isil -name '*.txt' -o -name '*.pica' | sed s/pica/json/ | sed 
 NT  =$(shell find isil -name '*.json' | sed s/json/nt/)
 
 info:
-	@echo 'Usage: make json | nt | isildir | lobid'
-# TODO: show statistics
+	@find isil/* -mindepth 1 -printf '%f\n' | sort | uniq -c
+	@find isil/* -type d -empty
 
 isildir:
 	@ls ./isil | xargs ./app/getisildir.pl

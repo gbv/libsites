@@ -1,0 +1,39 @@
+[% INCLUDE header.html title="Korrekturen und Feedback" %]
+[% base = request.base.remove('/$') %]
+
+<p>
+Fehlerhafte oder fehlende Angaben k&ouml;nnen folgenderma&szlig;en korrigiert werden:
+</p>
+<h3>Adressdaten und Koordinaten</h3>
+<p>
+ Namen, Adressen und Koordinaten von Bibliotheken stammen aus dem Projekt
+ <a href="http://lobid.org">lobid.org</a>
+ des Hochschulbibliothekszentrums des Landes Nordrhein-Westfalen (hbz), welches wiederum aus
+ dem <a href="http://dispatch.opac.d-nb.de/DB=1.1/DB=1.2/">deutschen ISIL-Verzeichnis</a>
+ gespeist wird. Das ISIL-Verzeichnis bietet
+ <a href="http://sigel.staatsbibliothek-berlin.de/aenderungen-mitteilen.html">ein Formular f&uuml;r &Auml;nderungen</a> sowie 
+ <a href="http://sigel.staatsbibliothek-berlin.de/beantragung.html">ein Formular f&uuml; Neueintragungen</a> an.
+</p>
+<h3>Kataloge und Schnittstellen</h3>
+<p>Die Angaben zu Katalogen und Schnittstellen stammen von der Verbundzentrale des GBV und
+sind derzeit nur f&uuml;r GBV-Bibliotheken verf&uuml;gbar. 
+</p>
+<h3>Link auf Wikipedia <img src="[% request.base %]img/wikipedia30x30.png"/></h3>
+<p>F&uuml;r einen Link auf Wikipedia muss in Wikipedia ein Artikel existieren, in dem mit
+der <a href="http://de.wikipedia.org/wiki/Vorlage:Infobox_Bibliothek">Infobox Bibliothek</a> 
+die ISIL eingetragen ist.</p>
+<h3>Kartenausschnitte und Geb&auml;ude</h3>
+[% long = uri.geo_location.geo_long; lat = uri.geo_location.geo_lat %]
+[% IF long AND lat; THEN;
+   SET args = "?lat=$lat&lon=$long&zoom=16" %]
+<div style="float:right; padding-left:1em;">[% INCLUDE map.html location=uri.geo_location title=uri.foaf_name %]</div>
+[% END %]
+<p>
+  Die Kartenausschnitte stammen aus dem <a href="http://www.openstreetmap.de/">Projekt OpenStreetmap</a> (OSM).
+  Bitte <a href="http://openstreetbugs.schokokeks.org/$args">teilen Sie Korrekturen</a>
+  an Geb&auml;uden, Stra&szlig;en, etc. der OSM-Community mit oder
+  <a href="http://wiki.openstreetmap.org/wiki/DE:Editing">beheben den Fehler selber</a>[% IF args %]
+  z.B. <a href="http://ae.osmsurround.org/$args&layers=BTT">mit dem Amenity Editor</a>[%- END %]!
+</p>
+
+[% INCLUDE footer.html %]

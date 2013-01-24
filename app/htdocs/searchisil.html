@@ -1,0 +1,17 @@
+<p>
+[% base = request.base.remove('/$') %]
+<script type="text/javascript">
+    function submitISILSearch() {
+        var isil = jQuery("#isil").val();
+        if (isil) {
+            window.document.location = "$base/isil/" + isil;
+        }
+        return false;
+    }
+</script>
+<form id="searchisil" onSubmit="submitISILSearch(); false;">
+  <label for="isil"><abbr title="International Standard Identifier for Libraries and Related Organizations">ISIL</abbr>:</label> 
+  <input type="text" id="isil" name="isil" value="$isil" />
+  <input type="button" value="suchen" onClick="submitISILSearch();"/>
+</form>
+</p>

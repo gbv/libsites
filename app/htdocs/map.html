@@ -1,0 +1,48 @@
+[% SET long = location.geo_long %]
+[% SET lat  = location.geo_lat %]
+[% IF long AND lat %]
+<div> 
+  <div class="geo" id="map_canvas" style="width:600px; height:400px"> 
+    <!--span class="latitude" title="$loc.geo_lat" style="display:none">$loc.geo_lat</span> 
+    <span class="longitue" title="$loc.geo_long" style="display:none">$loc.geo_long</span-->
+    <!--noscript> 
+      <div>
+        <img src="http://maps.google.com/maps/api/staticmap?zoom=14&amp;size=400x400&amp;sensor=false&amp;markers=color:red|label:B|$lat,$long" alt="Map" />
+      </div>
+    </noscript>--> 
+  </div> 
+  <script type="text/javascript"><!--
+      map = new OpenLayers.Map("map_canvas",{
+        controls: [
+          new OpenLayers.Control.KeyboardDefaults(),
+          new OpenLayers.Control.Navigation(),
+          //new OpenLayers.Control.LayerSwitcher(),
+          new OpenLayers.Control.PanZoomBar()
+        ]
+      });
+      map.addLayer(new OpenLayers.Layer.OSM());
+
+      var lonlat = new OpenLayers.LonLat($long,$lat);
+      lonlat.transform(
+          new OpenLayers.Projection("EPSG:4326"),
+          map.getProjectionObject()
+      );
+      var zoom=16;
+
+      /*var marker_icon = new GIcon();
+      marker_icon.image = "img/pin-32x32.png";
+      marker_icon.iconSize = new GSize(32, 32)
+      marker_icon.iconAnchor = new GPoint(22, 30);
+      var marker = new GMarker(new GLatLng($lat,$long),
+        { icon: marker_icon,
+          zIndexProcess: function() { return 200; } });*/
+      var marker = new OpenLayers.Layer.Markers( "Markers" );
+      marker.addMarker(new OpenLayers.Marker(lonlat));
+      map.addLayer(marker);
+
+      map.setCenter (lonlat, zoom); 
+    -->
+    </script>
+</div>
+
+[% END %]

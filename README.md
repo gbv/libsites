@@ -7,12 +7,10 @@ z.B. dem ISIL-Verzeichnis, ermitteln.
 # Übersicht
 
 Für jede Bibliothek kann im Verzeichnis `isil` ein Unterverzeichnis mit der
-jeweiligen Bibliotheks-ISIL angelegt werden. Darin können die Standorte in
-einer semi-strukturieren Textdatei `sites.txt` aufgenommen werden, aus der
-mittels Makefile strukturierte Standortdaten in JSON-LD und anderen
-RDF-Serialisierungen erzeugt werden.
+jeweiligen Bibliotheks-ISIL angelegt werden. Innerhalb dieses Verzeichnis
+können verschiedenen Dateien manuell oder automatisch angelegt werden.
 
-# Aufbau des Repository
+## Aufbau des Repository
 
 Für jede Bibliothek sind folgende Dateien vorgesehen:
 
@@ -28,7 +26,7 @@ Für jede Bibliothek sind folgende Dateien vorgesehen:
 * `context.json` - JSON-LD context definition
 * `Makefile` 
 * `app/txt2json.pl`
-* `app/normalize.pl`
+* `app/normalize.pl` - Normalisiert JSON
 
 # Installation
 

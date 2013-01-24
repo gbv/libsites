@@ -1,0 +1,24 @@
+[% SET email = vcard.vcard_email.str.remove('^mailto:') %]
+[% SET tels = vcard.vcard_tel_ %]
+[% IF vcard.vcard_adr OR vcard.gbv_address %]
+ <h3>Adresse</h3>
+ <p itemprop="address">
+   [% SET adr = vcard.vcard_adr %]
+   [% IF adr %] 
+     [% adr.rel('vcard_street-address') %]<br/>
+     [% adr.rel('vcard_postal-code') %]
+     [ % adr.vcard_locality %], [% adr.rel('vcard_country-name') %]
+   [% ELSE %]
+     [% uri.gbv_address | html_line_break %]
+   [% END %]
+ </p>
+ [% IF email %]<p itemprop="email">$email</p>[% END %]
+ [% IF tels.size %]<p>
+   [% FOREACH t in tels %]
+     <!-- TODO -->
+   [% END %]
+ </p>[% END %]
+[% END %]
+<p>
+  <a itemprop="url" class="fn url" href="$vcard.vcard_url.href">$vcard.vcard_url</a>
+</p>

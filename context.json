@@ -10,10 +10,13 @@
       "org"    : "http://www.w3.org/ns/org#",
       "owl"    : "http://www.w3.org/2002/07/owl#",
       "vcard"  : "http://www.w3.org/2006/vcard/ns#",
+      "rdf"    : "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
       "foaf:mbox"     : { "@type" : "@id" },
       "foaf:phone"    : { "@type" : "@id" },
       "foaf:homepage" : { "@type" : "@id" },
       "owl:sameAs"    : { "@type" : "@id" },
-      "vcard:url"     : { "@type" : "@id" }
+      "vcard:url"     : { "@type" : "@id" },
+      "rdf:type"      : { "@type" : "@id" },
+      "org:hasSite"   : { "@type" : "@id" }
    }
 }
