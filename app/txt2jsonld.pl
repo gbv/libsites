@@ -35,11 +35,13 @@ sub finish {
     ($address, $hours, $info, $sep, %cur) = ("","","",0,()); 
 }
 
+my $ISIL = '[A-Z]{1,4}-[A-Za-z0-9-]+';
+
 while(<>) {
     s/^\s+|\s+$//g;
     next if /^#/; # comment
 
-    if ($_ and $_ =~ qr{^(ISIL [A-Z]+-[A-Za-z0-9-]+)?(@(.*))?$}) {
+    if ($_ and $_ =~ qr{^($ISIL)?(@(.*))?$}) {
         my $sst = $1 // $isil // fail "Missing ISIL for identifier: $_";
         $sst = "http://uri.gbv.de/organization/isil/$sst";
         if ($3) {
