@@ -1,6 +1,7 @@
 [% SET long = location.geo_long %]
 [% SET lat  = location.geo_lat %]
 [% IF long AND lat %]
+<div style="float:right; padding-left:1em; text-align:right">
 <div> 
   <div class="geo" id="map_canvas" style="width:600px; height:400px"> 
     <!--span class="latitude" title="$loc.geo_lat" style="display:none">$loc.geo_lat</span> 
@@ -44,5 +45,9 @@
     -->
     </script>
 </div>
-
+<!-- -->
+<small>Koordinaten: 
+<a href="http://toolserver.org/~geohack/geohack.php?language=de&params=[%lat%]_N_[%long%]_E_type:landmark">[% lat %], [% long %]</a>
+</small>
+</div>
 [% END %]

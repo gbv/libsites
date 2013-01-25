@@ -17,6 +17,7 @@
       "foaf:homepage" : { "@type" : "@id" },
       "owl:sameAs"    : { "@type" : "@id" },
       "vcard:url"     : { "@type" : "@id" },
+      "vcard:email"   : { "@type" : "@id" },
       "rdf:type"      : { "@type" : "@id" },
       "org:hasSite"   : { "@type" : "@id" }
    }

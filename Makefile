@@ -16,6 +16,9 @@ isildir:
 lobid:
 	@ls ./isil | xargs ./app/getlobidorg.pl
 
+opacs:
+	@ls ./isil | xargs ./app/getopac.pl
+
 # convert all .txt and .pica to .json
 json: $(JSON)
 

@@ -50,7 +50,7 @@ PICA::Parser->new->parsefile( \*STDIN, Record => sub {
         my ($d,$e,$f) = map { $com->sf($_) } qw(d e f);
         my $tel = "(+$d)-$e/$f";
         ($rdf->{'foaf:phone'}) = "tel:+$tel" if $tel =~ /^[0-9()\/ -]+$/;
-        $rdf->{'foaf:mbox'} = $rdf->{'vcard:email'} = $com->sf('k');
+        $rdf->{'foaf:mbox'} = $rdf->{'vcard:email'} = "mailto:".$com->sf('k');
     }
     
     # TODO

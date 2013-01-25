@@ -1,12 +1,10 @@
-[% INCLUDE header.html title = uri.foaf_name %]
+﻿[% INCLUDE header.html title = uri.foaf_name %]
 [% SET isil = uri.dc_identifier %]
 <div itemscope itemtype="http://schema.org/[% isil ? "Library" : "Organization" %]" class="vcard">
    <!--[% INCLUDE feedback_notify.html %]-->
    <span style="display:none" itemprop="name" class="fn org">[% uri.foaf_name %]</span>
    [% IF uri.geo_location %]
-    <div style="float:right; padding-left:1em;">
      [% INCLUDE map.html location=uri.geo_location title=uri.foaf_name %]
-    </div>
    [% END %]
    <div>
    [% IF isil %]
@@ -14,6 +12,11 @@
      <b><abbr title="International Standard Identifier for Libraries and Related Organizations">ISIL</abbr>:</b>
      <a href="http://dispatch.opac.d-nb.de/DB=1.2/CMD?ACT=SRCHA&IKT=8529&TRM=$isil">$isil</a>
     </p>
+   [% END %]
+   [% IF uri.rev('org:hasSite') %]
+   <p><b>Gehört zu:</b>
+     [% INCLUDE namedlink.html x=uri.rev('org:hasSite') %]
+   </p>
    [% END %]
    [% IF uri.dbprop_shortName %]
     <p><b>Kurzbezeichnung:</b> [% uri.dbprop_shortName %]</p>
@@ -23,6 +26,16 @@
    [% ELSE %]
      [% INCLUDE vcard.html vcard=uri %]
    [% END %]
+
+   [% IF uri.gbv_openinghours %]
+   <h3>Öffnungszeiten</h3>
+   <p>
+      [% FOREACH o IN uri.gbv_openinghours_ %]
+        [% o | html_line_break %]
+      [% END %]
+   </p>
+   [% END %]
+
    [% SET opac = uri.gbv_opac %] 
    [% IF opac %]
     [% IF opac.str.match('^http://uri.gbv.de/database/') %]
@@ -45,6 +58,7 @@
      </dl>
     [% END %]
    [% END %]
+
    [% wikipedia=uri.foaf_isPrimaryTopicOf %]
    [% IF wikipedia %]
      <h3>Weitere Informationen</h3>
@@ -57,7 +71,7 @@
     <ul>
       [% FOREACH site IN sites %]
         <li>
-          <a href="[% site %]">[% IF site.foaf_name; site.foaf_name; ELSE; site; END %]</a>
+          [% INCLUDE namedlink.html x=site %]
           [% IF site.gbv_address %]<br>[% site.gbv_address | replace('\n',' / ') %][% END %]
           [% IF site.dc_description %]<br><em>[% site.dc_description %]</em>[% END %]
         </li>

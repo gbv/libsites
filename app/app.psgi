@@ -15,6 +15,7 @@ use RDF::Lazy;
 use RDF::Trine::Model;
 use RDF::Trine::Parser;
 use Plack::Middleware::TemplateToolkit;
+use CHI;
 
 my $htdocs = rel2abs(catdir(dirname($0),'htdocs'));
 
@@ -22,9 +23,7 @@ sub is_devel { ($ENV{PLACK_ENV}||'') eq 'development' }
 
 my $html_app = Plack::Middleware::TemplateToolkit->new( 
         INCLUDE_PATH => $htdocs,
-        RELATIVE => 1, # ??
         INTERPOLATE => 1, 
-        pass_through => 0,
         timer => is_devel,
         vars => { formats => [qw(ttl rdfxml nt json)] },
         request_vars => [qw(base)],
@@ -45,7 +44,12 @@ builder {
         root => $htdocs, 
         path => qr{\.(css|png|gif|js|ico)$};
 
-    # TODO: Cached
+    # cache everything else for 10 seconds. TODO: set cache time
+    enable 'Cached',
+            cache => CHI->new( 
+                driver => 'Memory', global => 1, 
+                expires_in => '10 seconds' 
+            );
 
     enable 'JSONP';
     enable 'Negotiate',
@@ -64,7 +68,8 @@ builder {
         my $app = shift;
         return sub {
             my $env = shift;
-            return $app->($env) unless $env->{'negotiate.format'} eq 'html';
+            return $app->($env) 
+                unless $env->{'negotiate.format'} eq 'html';
             $env->{'negotiate.format'} = 'nt';
             Plack::Util::response_cb( $app->($env), sub {
                 my $res = shift;
@@ -80,11 +85,7 @@ builder {
 
                 my $lazy = RDF::Lazy->new( $rdf, namespaces => $NS );
                 $env->{'tt.vars'}->{uri} = $lazy->resource($uri);
-#                $env->{'tt.vars'}->{isil} = Plack::Request->new($env)->path;
                 $env->{'tt.vars'}->{javascript} = [ 'OpenLayers.js' ];
-
-
-                # TODO: different pathes for base URL and sites
 
                 $env->{'tt.path'} = '/organization.html';   
                 my $res2 = $html_app->call( $env );
@@ -97,5 +98,6 @@ builder {
     Plack::App::RDF::Files->new( 
         base_dir => rel2abs(catdir(dirname($0),'..','isil')),
         base_uri => 'http://uri.gbv.de/organization/isil/',
+        path_map => sub { $_ = shift; $_ =~ s/\@.+$//; $_ },
     );
 };
