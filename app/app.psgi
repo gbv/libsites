@@ -15,7 +15,7 @@ use RDF::Lazy;
 use RDF::Trine::Model;
 use RDF::Trine::Parser;
 use Plack::Middleware::TemplateToolkit;
-use CHI;
+#use CHI;
 
 my $htdocs = rel2abs(catdir(dirname($0),'htdocs'));
 
@@ -45,23 +45,24 @@ builder {
         path => qr{\.(css|png|gif|js|ico)$};
 
     # cache everything else for 10 seconds. TODO: set cache time
-    enable 'Cached',
-            cache => CHI->new( 
-                driver => 'Memory', global => 1, 
-                expires_in => '10 seconds' 
-            );
+    # TODO: caching nur moeglich wenn materialized!
+    #enable 'Cached',
+    #        cache => CHI->new( 
+    #            driver => 'Memory', global => 1, 
+    #            expires_in => '10 seconds' 
+    #        );
 
     enable 'JSONP';
     enable 'Negotiate',
         parameter => 'format',
         extension => 'strip',
         formats => {
-            'ttl' => { type => 'text/turtle' },
-            'nt' => { type => 'text/plain' },
-            'n3' => { type => 'text/n3' },
-            'json' => { type => 'application/rdf+json' },
-            'html' => { type => 'text/html' },
-            _ => { charset => 'utf-8', }
+            ttl  => { type => 'text/turtle' },
+            nt   => { type => 'text/plain' },
+            n3   => { type => 'text/n3' },
+            json => { type => 'application/rdf+json' },
+            html => { type => 'text/html' },
+            _    => { charset => 'utf-8', }
         };
 
     enable sub {
@@ -73,21 +74,24 @@ builder {
             $env->{'negotiate.format'} = 'nt';
             Plack::Util::response_cb( $app->($env), sub {
                 my $res = shift;
-                my $uri = $env->{'rdflow.uri'};
+                my $uri = $env->{'rdf.uri'};
 
-                # TODO: get via $env->{'rdflow.data'} to avoid re-parsing
+                # TODO: get via $env->{'rdf.data'} to avoid re-parsing
                 my $rdf = RDF::Trine::Model->new;
                 if ($res->[0] eq '200') {
                     my $parser = RDF::Trine::Parser->new('ntriples');
                     my $data = join '', @{$res->[2]};
                     $parser->parse_into_model( $uri, $data, $rdf );
+                    my $lazy = RDF::Lazy->new( $rdf, namespaces => $NS );
+
+                    $env->{'tt.vars'}->{uri} = $lazy->resource($uri);
+                    $env->{'tt.vars'}->{javascript} = [ 'OpenLayers.js' ];
+
+                    $env->{'tt.path'} = '/organization.html';   
+                } else {
+                    $env->{'tt.vars'}->{uri} = $env->{'rdf.uri'};
                 }
 
-                my $lazy = RDF::Lazy->new( $rdf, namespaces => $NS );
-                $env->{'tt.vars'}->{uri} = $lazy->resource($uri);
-                $env->{'tt.vars'}->{javascript} = [ 'OpenLayers.js' ];
-
-                $env->{'tt.path'} = '/organization.html';   
                 my $res2 = $html_app->call( $env );
 
                 $res->[$_] = $res2->[$_] for (0..2);
