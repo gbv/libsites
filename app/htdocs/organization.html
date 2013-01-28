@@ -18,9 +18,11 @@
      [% INCLUDE namedlink.html x=uri.rev('org:hasSite') %]
    </p>
    [% END %]
+
    [% IF uri.dbprop_shortName %]
     <p><b>Kurzbezeichnung:</b> [% uri.dbprop_shortName %]</p>
    [% END %]
+
    [% IF uri.hcterms_hasCard %]
      [% INCLUDE vcard.html vcard=uri.hcterms_hasCard %]
    [% ELSE %]
@@ -69,7 +71,7 @@
    [% IF sites.size %]
     <h3>Standorte</h3>
     <ul>
-      [% FOREACH site IN sites %]
+      [% FOREACH site IN sites.sort %]
         <li>
           [% INCLUDE namedlink.html x=site %]
           [% IF site.gbv_address %]<br>[% site.gbv_address | replace('\n',' / ') %][% END %]

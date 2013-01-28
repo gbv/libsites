@@ -1,5 +1,6 @@
 [% SET emails = vcard.foaf_mbox_.merge( vcard.foaf_mbox_ ).unique %]
 [% SET tels = vcard.vcard_tel_.merge( vcard.foaf_phone_ ).unique %]
+[% SET urls = vcard.foaf_homepage_.merge( vcard.vcard_url_ ).unique %]
 [% IF vcard.vcard_adr OR vcard.gbv_address %]
  <h3>Adresse</h3>
  <p itemprop="address">
@@ -27,6 +28,12 @@
    </p>
  [% END %]
 [% END %]
-<p>
-  <a itemprop="url" class="fn url" href="$vcard.vcard_url.href">$vcard.vcard_url</a>
-</p>
+
+[% IF urls %]
+  <p>
+    [% FOR url IN urls %]
+      [% IF NOT loop.first %]<br>[% END %]
+      <a itemprop="url" class="fn url" href="[% url %]">[% url %]</a>
+    [% END %]
+  </p>
+[% END %]
