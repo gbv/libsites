@@ -33,9 +33,10 @@ sub finish {
     my $sst = $cur{'@id'};
     $sites->{ $sst } = { %cur };
     ($address, $hours, $info, $sep, %cur) = ("","","",0,()); 
+    delete $cur{'foaf:name'};
 }
 
-my $ISIL = '[A-Z]{1,4}-[A-Za-z0-9-]+';
+my $ISIL = '[A-Z]{2}-[A-Za-z0-9-]{1,11}';
 
 while(<>) {
     s/^\s+|\s+$//g;
@@ -43,10 +44,7 @@ while(<>) {
 
     if ($_ and $_ =~ qr{^($ISIL)?(@(.*))?$}) {
         my $sst = $1 // $isil // fail "Missing ISIL for identifier: $_";
-        $sst = "http://uri.gbv.de/organization/isil/$sst";
-        if ($3) {
-            $sst .= $2;
-        }
+        $sst = "http://uri.gbv.de/organization/isil/$sst" . ($3 ? $2 : '');
         finish;
         $cur{'@id'} = $sst;
     } elsif (!$cur{'foaf:name'}) {
