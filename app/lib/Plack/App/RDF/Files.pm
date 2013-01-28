@@ -146,6 +146,8 @@ sub call {
             my $responder = shift;
             # TODO: use IO::Handle::Iterator to serialize as last as possible
             my $rdf = $ser->serialize_iterator_to_string( $iter );
+            use Encode; # must be bytes
+            $rdf = encode("UTF8",$rdf);
             $responder->( [ 200, [ @headers ], [ $rdf ] ] );
         };
     } else {
