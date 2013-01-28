@@ -99,9 +99,17 @@ builder {
         };
     };
 
-    Plack::App::RDF::Files->new( 
-        base_dir => rel2abs(catdir(dirname($0),'..','isil')),
-        base_uri => 'http://uri.gbv.de/organization/isil/',
-        path_map => sub { $_ = shift; $_ =~ s/\@.+$//; $_ },
-    );
+    builder {
+        mount '/isil' =>
+            Plack::App::RDF::Files->new( 
+                base_dir => rel2abs(catdir(dirname($0),'..','isil')),
+                base_uri => 'http://uri.gbv.de/organization/isil/',
+                path_map => sub { $_ = shift; $_ =~ s/\@.+$//; $_ },
+            );
+        mount '/' =>
+            Plack::App::RDF::Files->new( 
+                base_dir => rel2abs(catdir(dirname($0),'lib')),
+                base_uri => 'http://uri.gbv.de/organization/',
+            );
+    };
 };
