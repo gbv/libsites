@@ -1,25 +1,18 @@
 #!/usr/bin/perl
-use strict;
-use warnings;
-use 5.10.1; 
+#ABSTRACT: Holt RDF-Daten zu Katalogen von http://uri.gbv.de/database/
+use v5.14;
 
-use File::Spec::Functions qw(catdir catfile rel2abs);
-use File::Basename qw(dirname);
-use lib rel2abs(catdir(dirname($0),'lib'));
-use GBV::Libsites;
+use FindBin;
+use lib "$FindBin::Bin/lib";
+use GBV::App::GetISIL;
 
-die "Missing directory isil/\n" unless -d 'isil';
-
-foreach my $isil (@ARGV) {
-    if ($isil !~ qr{^[a-zA-Z0-9:/-]+$}) {
-        say STDERR "Invalid ISIL: $isil";
-        next;
-    }
-
+getisil 'opac.ttl' => sub {
+    my $isil = shift;
     my $dbkey = "opac-". lc($isil);
-    my $url = "http://uri.gbv.de/database/$dbkey?format=ttl";
-    my $rdf = get_lod( $url ) or next;
-        # TODO: delete existing graph?
 
-    update_ttl_file( $isil, 'opac', $rdf);
-}
+    my ($rdf, $msg) = getlod( "http://uri.gbv.de/database/$dbkey?format=ttl" );
+    return (undef, $msg) unless $rdf;
+
+    my $ttl = serializettl( $rdf );
+    return ($ttl, "retrieved ".$rdf->size." triples");
+};

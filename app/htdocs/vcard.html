@@ -1,6 +1,7 @@
-[% SET emails = vcard.foaf_mbox_.merge( vcard.foaf_mbox_ ).unique %]
+[% SET emails = vcard.foaf_mbox_.merge( vcard.foaf_mbox_, vcard.vcard_email_ ).unique %]
 [% SET tels = vcard.vcard_tel_.merge( vcard.foaf_phone_ ).unique %]
 [% SET urls = vcard.foaf_homepage_.merge( vcard.vcard_url_ ).unique %]
+
 [% IF vcard.vcard_adr OR vcard.gbv_address %]
  <h3>Adresse</h3>
  <p itemprop="address">
@@ -8,7 +9,8 @@
    [% IF adr %] 
      [% adr.rel('vcard_street-address') %]<br/>
      [% adr.rel('vcard_postal-code') %]
-     [ % adr.vcard_locality %], [% adr.rel('vcard_country-name') %]
+     [% SET country = adr.rel('vcard_country-name') %]
+     [% adr.vcard_locality %][% IF country %]$country[% END %]
    [% ELSE %]
      [% uri.gbv_address | html_line_break %]
    [% END %]
@@ -16,6 +18,7 @@
  [% IF emails.size %]
    <p itemprop="email">
      [% FOREACH e IN emails %]
+       [% IF NOT loop.first %]<br>[% END %]
        [% e.str.remove('^mailto:') %]
      [% END %]
    </p>
@@ -23,12 +26,12 @@
  [% IF tels.size %]
    <p>
      [% FOREACH t IN tels %]
-       [% t %]
+       [% IF NOT loop.first %]<br>[% END %]
+       [% IF t.rdf_value %]$t.rdf_value[% ELSE %]$t[% END %]
      [% END %]
    </p>
  [% END %]
 [% END %]
-
 [% IF urls %]
   <p>
     [% FOR url IN urls %]

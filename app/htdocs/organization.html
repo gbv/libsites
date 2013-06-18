@@ -39,13 +39,15 @@
    [% END %]
 
    [% SET opac = uri.gbv_opac %] 
-   [% IF opac %]
+   [% IF opac AND opac.foaf_homepage %]
     [% IF opac.str.match('^http://uri.gbv.de/database/') %]
      <h3><a href="$opac.href">Katalog</a></h3>
     [% ELSE %]
      <h3>Katalog</h3>
     [% END %]
-    <p><a href="$opac.foaf_homepage.href">$opac.dcterms_title</a></p>
+    <p><a href="$opac.foaf_homepage.href">
+      [% IF opac.dcterms_title %]$opac.dcterms_title[% ELSE %]$opac.foaf_homepage.href[% END %]
+    </a></p>
     [% IF opac.gbv_dbkey or opac.gbv_srubase %]
      <h3>Schnittstellen</h3>
      <dl>

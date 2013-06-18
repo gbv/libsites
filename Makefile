@@ -1,17 +1,17 @@
-.PHONY: info isildir lobid shortnames
+.PHONY: info zdb lobid shortnames
 .SUFFIXES: .txt .pica .json .nt
 
-TXT =$(shell find isil -name '*.txt')
-PICA=$(shell find isil -name '*.pica')
-JSON=$(shell find isil -name '*.txt' -o -name '*.pica' | sed s/pica/json/ | sed s/txt/json/)
-NT  =$(shell find isil -name '*.json' | sed s/json/nt/)
+TXT  = $(shell find isil -name '*.txt')
+PICA = $(shell find isil -name '*.pica')
+JSON = $(shell find isil -name '*.txt' -o -name '*.pica' | sed s/pica/json/ | sed s/txt/json/)
+NT   = $(shell find isil -name '*.json' | sed s/json/nt/)
 
 info:
 	@find isil/* -mindepth 1 -printf '%f\n' | sort | uniq -c
 	@find isil/* -type d -empty
 
-isildir:
-	@ls ./isil | xargs ./app/getisildir.pl
+zdb:
+	@ls ./isil | xargs ./app/zdb.pl
 	
 lobid:
 	@ls ./isil | xargs ./app/getlobidorg.pl
@@ -27,7 +27,7 @@ json: $(JSON)
 
 .pica.json:
 	@echo $< to $@
-	@./app/isildir2rdf.pl < $< > $@
+	@./app/zdb2rdf.pl < $< > $@
 	@./app/normalize.pl $@
 
 ###############################################################################

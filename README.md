@@ -1,34 +1,43 @@
-Dieses git-Repository enthält öffentliche Standortinformationen von
-Bibliotheksstandorten für den Gemeinsamen Bibliotheksverbund (GBV).  Soweit
-vorhanden, werden die Informationen nicht direkt im Repository abgelegt
-sondern in Form von Skripten, die die Informationen aus anderem Quellen,
-z.B. dem ISIL-Verzeichnis, ermitteln.
+# Standortinformationen für den GBV
 
-# Übersicht
+Dieses Git-Repository enthält Informationen zu **Bibliotheksstandorten** für
+den [Gemeinsamen Bibliotheksverbund](http://www.gbv.de) (GBV). Zu den
+Standortinformationen gehören Angaben über Teilbibliotheken oder einzelne
+Gebäude, Adressen, Öffnungszeiten, Webseiten etc.
 
-Für jede Bibliothek kann im Verzeichnis `isil` ein Unterverzeichnis mit der
-jeweiligen Bibliotheks-ISIL angelegt werden. Innerhalb dieses Verzeichnis
-können verschiedenen Dateien manuell oder automatisch angelegt werden.
+Alle Inhalte sind öffentlich und frei nutzbar im Sinne von Open Data 
+([CC Zero](http://creativecommons.org/publicdomain/zero/1.0/deed.de)).
 
-## Aufbau des Repository
+## Übersicht
+
+Im Verzeichnis [`isil`](./isil) kann für jede Bibliothek ein Unterverzeichnis
+mit der jeweiligen Bibliotheks-ISIL angelegt werden. Beispielsweise liegen im
+Verzeichnis [`isil/DE-Hil2`](./isil/DE-Hil2) die Standortinformationen für die
+Universitätsibliothek Hildesheim (ISIL DE-Hil2). Innerhalb der einzelnen
+Verzeichnisse sind verschiedene [Quelldateien](#quelldateien) vorgesehen.
+
+Neben dem Verzeichnis `isil` liegen im Verzeichnis [`app`](/.app) verschiedene
+Programme zur Verwaltung der Standortinformationen.
+
+## Quelldateien 
+
+Soweit vorhanden, werden die Informationen nicht direkt im Repository abgelegt
+sondern in Form von Skripten, die die Informationen aus anderem Quellen, z.B.
+dem ISIL-Verzeichnis, ermitteln.
 
 Für jede Bibliothek sind folgende Dateien vorgesehen:
 
 * sites.txt - Standortdefinitionen, ggf. mit Name, Adresse, URL, Geokoordinate etc.
   * *sites.json* - RDF/JSON-LD erzeugt aus sites.txt mit `app/txt2json.pl`
   * *sites.nt*   - RDF/Ntriples aus sites.json
-* isildir.pica - PICA-Normsatz aus dem ISIL-Verzeichnis, geholt mit `app/getisildir.pl` 
-  * *isildir.json* - RDF/JSON-LD erzeugt aus isildirectory.pica mit `app/isildir2rdf.pl`
+* zdb.pica - PICA-Normsatz aus dem ISIL-Verzeichnis, geholt mit `app/getzdb.pl` 
+  * *zdb.json* - RDF/JSON-LD erzeugt aus zdb.pica mit `app/isildir2rdf.pl`
+  * *zdb.ttl* - RDF/Turtle-Version
+* zdbrdf.nt - RDF-Export aus dem ISIL-Verzeichnis
+* lobid.ttl - RDF/Turtle von Lobid.org
+* opac.ttl - Informationen zum Katalog der Bibliothek, geholt mit `app/getopac.pl`
 
-## Datensätze
-## Allgemeine Dateien
-
-* `context.json` - JSON-LD context definition
-* `Makefile` 
-* `app/txt2json.pl`
-* `app/normalize.pl` - Normalisiert JSON
-
-# Installation
+## Installation
 
 Das Repository kann direkt von einen Apache-Webserver ausgeliefert werden.
 Allerdings sollte im Unterverzeichnis `.git` folgende `.htaccess` angelegt
@@ -38,10 +47,21 @@ werden:
 
 Die weitere Steuerung ist bereits in `.htaccess`-Dateien hinterlegt. 
 
-# Requirements
+## Requirements
 
 * Make
-* Perl >= 5.10.1
-* Perl CPAN modules JSON, File::Slurp
-* nodejs with package `jsonld`
+* Perl >= 5.14
+* Perl CPAN modules
+  * JSON
+  * File::Slurp
+  * PICA::Record >= 0.584
+  * RDF::NS
+  * RDF::Lazy
+  * RDF::Trine
+  * Plack::Middleware::TemplateToolkit
+  * CHI
+* nodejs with package `jsonld` (TODO: entfernen)
+  * `sudo aptitude install nodejs npm`
+  * `cd app`
+  * `npm install jsonld`
 
