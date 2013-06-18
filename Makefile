@@ -1,4 +1,4 @@
-.PHONY: info zdb lobid shortnames
+.PHONY: info zdb lobid shortnames isil.csv
 .SUFFIXES: .txt .pica .json .nt
 
 TXT  = $(shell find isil -name '*.txt')
@@ -53,6 +53,11 @@ nt: $(NT)
 shortnames: $(NT)
 	@grep -r short isil/*/*.nt
 # TODO: nt2beacon
+
+###############################################################################
+
+isil.csv:
+	@ls isil > $@	
 
 ###############################################################################
 

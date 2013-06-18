@@ -16,7 +16,7 @@ Verzeichnis [`isil/DE-Hil2`](./isil/DE-Hil2) die Standortinformationen für die
 Universitätsibliothek Hildesheim (ISIL DE-Hil2). Innerhalb der einzelnen
 Verzeichnisse sind verschiedene [Quelldateien](#quelldateien) vorgesehen.
 
-Neben dem Verzeichnis `isil` liegen im Verzeichnis [`app`](/.app) verschiedene
+Neben dem Verzeichnis `isil` liegen im Verzeichnis [`app`](./app) verschiedene
 Programme zur Verwaltung der Standortinformationen.
 
 ## Quelldateien 
