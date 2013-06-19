@@ -1,11 +1,15 @@
-# Standortinformationen für den GBV
+# Bibliotheksverzeichnis als Linked Open Data für den GBV
 
-Dieses Git-Repository enthält Informationen zu **Bibliotheksstandorten** für
-den [Gemeinsamen Bibliotheksverbund](http://www.gbv.de) (GBV). Zu den
-Standortinformationen gehören Angaben über Teilbibliotheken oder einzelne
-Gebäude, Adressen, Öffnungszeiten, Webseiten etc.
+Diese Git-Repository enthält **Informationen zu Bibliotheken und verwandten
+Einrichtungen** für den [Gemeinsamen Bibliotheksverbund](http://www.gbv.de)
+(GBV). Zu den Informationen Angaben wie Namen, Adressen, Öffnungszeiten,
+Standorte, Teilbibliotheken etc. Prinzipiell werden nur solche Daten
+aufgenommen, die nicht automatisch aus anderen Quellen, wie dem
+[ISIL-Verzeichnis](http://sigel.staatsbibliothek-berlin.de/) ermittelt
+werden können.
 
-Alle Inhalte sind öffentlich und frei nutzbar im Sinne von Open Data 
+Die Inhalte werden unter <http://uri.gbv.de/organization/> als Linked Open
+Data zur Verfügung gestellt und sind frei nutzbar im Sinne von Open Data
 ([CC Zero](http://creativecommons.org/publicdomain/zero/1.0/deed.de)).
 
 ## Übersicht
@@ -35,7 +39,8 @@ Für jede Bibliothek sind folgende Dateien vorgesehen:
   * *zdb.ttl* - RDF/Turtle-Version
 * zdbrdf.nt - RDF-Export aus dem ISIL-Verzeichnis
 * lobid.ttl - RDF/Turtle von Lobid.org
-* opac.ttl - Informationen zum Katalog der Bibliothek, geholt mit `app/getopac.pl`
+* opac.ttl - Informationen zum Katalog der Bibliothek, geholt von
+   <http://uri.gbv.de/database/> mit `app/getopac.pl`
 
 ## Installation
 

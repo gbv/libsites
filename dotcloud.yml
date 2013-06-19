@@ -1,0 +1,30 @@
+# Configuration for file deployment at dotCloud
+
+www:
+  type: perl
+  approot: app
+  config:
+    perl_version: v5.14.x
+
+  # Required non-core modules in Perl v5.14.0
+  requirements: 
+    - CHI
+    - Data::Beacon
+    - File::ShareDir
+    - File::Slurp
+    - JSON;
+    - LWP::Simple
+    - Log::Contextual
+    - PICA::Record
+    - Plack
+    - Plack::Middleware::RDF::Flow
+    - Plack::Middleware::Rewrite
+    - Plack::Middleware::TemplateToolkit
+    - RDF::Dumper
+    - RDF::Flow
+    - RDF::Lazy
+    - RDF::NS
+    - RDF::Trine
+    - Try::Tiny
+    - URI
+    - URI::Escape

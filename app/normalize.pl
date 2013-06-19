@@ -1,7 +1,6 @@
 #!/usr/bin/perl
 
-use strict;
-use v5.10.1;
+use v5.14;
 use autodie;
 use File::Slurp;
 use JSON;

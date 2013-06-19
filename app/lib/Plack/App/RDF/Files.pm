@@ -1,8 +1,7 @@
 package Plack::App::RDF::Files;
 #ABSTRACT: Combine and serve RDF from static files
-use strict;
-use warnings;
-use v5.10.1;
+
+use v5.14;
 
 use parent 'Plack::Component';
 use Plack::Util::Accessor qw(base_dir base_uri file_types path_map 

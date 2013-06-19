@@ -2,7 +2,7 @@
 #ABSTRACT: Parse library sites information and convert to JSON-LD
 
 use strict;
-use v5.10.1;
+use v5.14;
 use autodie;
 use JSON;
 

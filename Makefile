@@ -1,4 +1,4 @@
-.PHONY: info zdb lobid shortnames isil.csv
+.PHONY: info zdb lobid opac update isil.csv
 .SUFFIXES: .txt .pica .json .nt
 
 TXT  = $(shell find isil -name '*.txt')
@@ -11,14 +11,16 @@ info:
 	@find isil/* -type d -empty
 
 zdb:
-	@ls ./isil | xargs ./app/zdb.pl
+	@ls ./isil | xargs ./app/getzdb.pl
 	
 lobid:
-	@ls ./isil | xargs ./app/getlobidorg.pl
+	@ls ./isil | xargs ./app/getlobid.pl
 
 opacs:
 	@ls ./isil | xargs ./app/getopac.pl
 
+update: zdb lobid opacs
+	
 # convert all .txt and .pica to .json
 json: $(JSON)
 
@@ -48,7 +50,7 @@ nt: $(NT)
 	@node app/jsonld2nt.js $< context.json > $@
 
 ###############################################################################
-# Extract from RDF
+# Extract from RDF (TODO: CREATE BEACON FILE)
 
 shortnames: $(NT)
 	@grep -r short isil/*/*.nt
