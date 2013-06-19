@@ -81,6 +81,6 @@ PICA::Parser->new->parsefile( \*STDIN, Record => sub {
 sub print_turtle {
     my $rdf = shift;
     my $uri = delete $rdf->{'@id'};
-    say turtle_statement( $uri , %$rdf );
+    say turtle_statement( "<$uri>" , %$rdf );
 }
 
