@@ -108,10 +108,13 @@ builder {
                     $env->{'tt.vars'}->{uri} = $lazy->resource($uri);
                     $env->{'tt.vars'}->{javascript} = [ 'OpenLayers.js' ];
 
-                    my @sources = 
-                        map { $_ =~ s/\..+$//; $SOURCES{$_} }
-                        grep { $env->{'rdf.files'}->{$_}->{size} } 
-                        keys $env->{'rdf.files'};
+                    my @sources; 
+                    foreach my $file ( keys $env->{'rdf.files'} ) {
+                        my $about = $env->{'rdf.files'}->{$file};
+                        my $s = $file; $s =~ s/\..+$//;
+                        my %h = (%{$SOURCES{$s}}, %$about, file => $file);
+                        push @sources,\%h;
+                    }
 
                     $env->{'tt.vars'}->{sources} = \@sources;
 

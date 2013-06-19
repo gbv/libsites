@@ -18,10 +18,18 @@
     <p>
       Quellen: <ul>
       [% FOR s IN sources %]
+        [% IF s.title OR s.size %]
         <li>
-          [% IF s.href %]<a href="$s.href">[% IF s.title -%]
+          [% IF s.href %]<a href="$s.href" title="$s.file">[% IF s.title -%]
           $s.title[% ELSE %]$s.href[% END %]</a>[% ELSE %]$s.title[% END %]
+          [% IF s.size %]
+            ($s.size triples)
+          [% END %]
+          [% IF s.error %]
+            <b>PARSING ERROR: $s.file</b>
+          [% END %]
         </li>
+        [% END %]
       [% END %]
     </ul>
     </p>
