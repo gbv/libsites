@@ -14,9 +14,9 @@ sites: $(TXTTTL)
 
 zdbttl: $(PICATTL)
 
-zdb: zdb zdbttl
+zdb: getzdb zdbttl
 
-zdb:
+getzdb:
 	@ls ./isil | xargs ./app/getzdb.pl
 	
 lobid:
