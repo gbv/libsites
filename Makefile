@@ -1,4 +1,4 @@
-.PHONY: info zdb lobid opac update sites isil.csv
+.PHONY: info zdb zdbttl lobid opac update sites isil.csv
 .SUFFIXES: .txt .pica .nt .ttl
 
 PICA = $(shell find isil -name '*.pica')

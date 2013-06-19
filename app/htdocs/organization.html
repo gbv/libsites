@@ -68,7 +68,7 @@
    [% wikipedia=uri.foaf_isPrimaryTopicOf %]
    [% IF wikipedia %]
      <h3>Weitere Informationen</h3>
-     <p>Artikel in Wikipedia <a href="$wikipedia.href" title="Artikel in Wikipedia"><img src="$base/img/wikipedia30x30.png" width="30" height="30" border="0" /></a></p>
+     <p><a href="$wikipedia.href" title="Artikel in Wikipedia">Artikel in Wikipedia</a></p>
    [% END %]
 
    [% sites = uri.org_hasSite_ %]
