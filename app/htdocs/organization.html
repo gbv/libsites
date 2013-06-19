@@ -3,8 +3,11 @@
 <div itemscope itemtype="http://schema.org/[% isil ? "Library" : "Organization" %]" class="vcard">
    <!--[% INCLUDE feedback_notify.html %]-->
    <span style="display:none" itemprop="name" class="fn org">[% uri.foaf_name %]</span>
-   [% IF uri.geo_location %]
-     [% INCLUDE map.html location=uri.geo_location title=uri.foaf_name %]
+   [% FOR location IN uri.geo_location_ %] 
+      [% IF location.geo_lat AND location.geo_long %]
+        [% INCLUDE map.html location=location title=uri.foaf_name %]
+        [% BREAK %]
+      [% END %]
    [% END %]
    <div>
    [% IF isil %]
