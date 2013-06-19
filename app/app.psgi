@@ -5,6 +5,8 @@ use File::Spec::Functions qw(catdir catfile rel2abs);
 use File::Basename qw(dirname);
 use lib rel2abs(catdir(dirname($0),'lib'));
 
+use Time::Piece;
+
 use Plack::Builder;
 use Plack::Util;
 use Plack::App::RDF::Files;
@@ -16,6 +18,25 @@ use RDF::Trine::Model;
 use RDF::Trine::Parser;
 use Plack::Middleware::TemplateToolkit;
 #use CHI;
+
+my %SOURCES = (
+    sites  => {
+        title => 'GBV Standortverzeichnis',
+        href => 'https://github.com/gbv/libsites'
+    },
+    opac  => {
+        href => 'http://uri.gbv.de/database/'
+    },
+    lobid => { 
+        title => 'Lobid.org',
+        href => 'http://lobid.org/',
+    },
+    zdbrdf => {
+        title => 'Deutsches ISIL- und Sigelverzeichnis',
+        href => 'http://sigel.staatsbibliothek-berlin.de/',
+    }
+);
+$SOURCES{zdb} = $SOURCES{zdbrdf};
 
 my $htdocs = rel2abs(catdir(dirname($0),'htdocs'));
 
@@ -86,6 +107,16 @@ builder {
 
                     $env->{'tt.vars'}->{uri} = $lazy->resource($uri);
                     $env->{'tt.vars'}->{javascript} = [ 'OpenLayers.js' ];
+
+                    my @sources = 
+                        map { $_ =~ s/\..+$//; $SOURCES{$_} }
+                        grep { $env->{'rdf.files'}->{$_}->{size} } 
+                        keys $env->{'rdf.files'};
+
+                    $env->{'tt.vars'}->{sources} = \@sources;
+
+                    $env->{'tt.vars'}->{timestamp} = 
+                        localtime($env->{'rdf.files.mtime'})->strftime;
 
                     $env->{'tt.path'} = '/organization.html';   
                 } else {

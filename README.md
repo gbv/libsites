@@ -32,11 +32,9 @@ dem ISIL-Verzeichnis, ermitteln.
 Für jede Bibliothek sind folgende Dateien vorgesehen:
 
 * sites.txt - Standortdefinitionen, ggf. mit Name, Adresse, URL, Geokoordinate etc.
-  * *sites.json* - RDF/JSON-LD erzeugt aus sites.txt mit `app/txt2json.pl`
-  * *sites.nt*   - RDF/Ntriples aus sites.json
+  * *sites.ttl* - RDF/Turtle erzeugt aus sites.txt mit `app/txt2ttl.pl`
 * zdb.pica - PICA-Normsatz aus dem ISIL-Verzeichnis, geholt mit `app/getzdb.pl` 
-  * *zdb.json* - RDF/JSON-LD erzeugt aus zdb.pica mit `app/isildir2rdf.pl`
-  * *zdb.ttl* - RDF/Turtle-Version
+  * *zdb.ttl* - RDF/Turtle erzeugt aus zdb.pica mit `app/zdb2ttl.pl`
 * zdbrdf.nt - RDF-Export aus dem ISIL-Verzeichnis
 * lobid.ttl - RDF/Turtle von Lobid.org
 * opac.ttl - Informationen zum Katalog der Bibliothek, geholt von
@@ -66,7 +64,7 @@ Die weitere Steuerung ist bereits in `.htaccess`-Dateien hinterlegt.
   * Plack::Middleware::TemplateToolkit
   * CHI
 * nodejs with package `jsonld` (TODO: entfernen)
-  * `sudo aptitude install nodejs npm`
+  * `sudo aptitude install node npm`
   * `cd app`
   * `npm install jsonld`
 

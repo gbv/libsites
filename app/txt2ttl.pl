@@ -5,6 +5,8 @@ use strict;
 use v5.14;
 use autodie;
 use JSON;
+use Turtle::Writer;
+use RDF::NS;
 
 my $sites = { };
 my (%cur, $address, $hours, $info, $sep);
@@ -22,13 +24,13 @@ sub fail($) {
 
 sub finish {
     return unless %cur;
-    $cur{'gbv:openinghours'} = $hours if $hours;
+    $cur{'gbv:openinghours'} = turtle_literal($hours) if $hours;
     if (!$info and $address and $address !~ /\d/m) {
         $info = $address; 
         $address = "";
     }
-    $cur{'gbv:address'} = $address if $address;
-    $cur{'dc:description'} = $info if $info;
+    $cur{'gbv:address'} = turtle_literal($address) if $address;
+    $cur{'dc:description'} = turtle_literal($info) if $info;
 
     my $sst = $cur{'@id'};
     $sites->{ $sst } = { %cur };
@@ -48,12 +50,12 @@ while(<>) {
         finish;
         $cur{'@id'} = $sst;
     } elsif (!$cur{'foaf:name'}) {
-        $cur{'foaf:name'} = $_;
+        $cur{'foaf:name'} = turtle_literal($_);
     } elsif ($_ =~ qr{[^@ ]+@[^@ ]+$}) {
-        $cur{'foaf:mbox'} = "mailto:$_";
+        $cur{'foaf:mbox'} = "<mailto:$_>";
         $sep=1;
     } elsif ($_ =~ qr{^http://.+$}) {
-        $cur{'foaf:homepage'} = $_;
+        $cur{'foaf:homepage'} = "<$_>";
         $sep=1;
     } elsif ($_ =~ qr{^(\d+\.\d+)\s*[,/;]\s*(\d+\.\d+)$}) {
         $cur{'geo:location'} = { 'geo:lat' => $1, 'geo:long' => $2 };
@@ -61,7 +63,7 @@ while(<>) {
     } elsif ($_ =~ qr{^(\+|\(\+)[0-9\(\)/ -]+$}) {
         my $tel = $_;
         $tel =~ s/\s+/-/g;
-        $cur{'foaf:phone'} = "tel:$tel";
+        $cur{'foaf:phone'} = "<tel:$tel>";
         $sep=1;
     } elsif ($_ =~ qr{(\d\d:\d\d|Uhr)} and $_ =~ qr{(Mo|Di|Mi|Do|Fr|Sa|So)}) {
         $hours = $hours ? "$hours\n$_" : $_;
@@ -78,18 +80,20 @@ while(<>) {
 }
 finish;
 
+delete $_->{'@id'} for values %$sites;
+
 if ($isil) {
     $isil = "http://uri.gbv.de/organization/isil/$isil";
-    $sites->{$isil} //= { '@id' => $isil };
-    my @has = grep { $_ ne $isil } keys %$sites;
+#    $sites->{$isil} //= { '@id' => $isil };
+    my @has = map { "<$_>" } grep { $_ ne $isil } keys %$sites;
     $sites->{$isil}->{'org:hasSite'} = \@has if @has;
 }
 
-my $jsonld = {
-    '@graph' => [
-        values %$sites
-    ]
-};
+say RDF::NS->new->TTL(qw(foaf dc gbv org geo));
 
-print to_json( $jsonld, {pretty=>1, canonical=>1});
+foreach (keys %$sites) {
+    say turtle_statement("<$_>",
+        %{ $sites->{$_} }
+    );
+}
 

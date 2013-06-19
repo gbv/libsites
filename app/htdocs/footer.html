@@ -14,7 +14,21 @@
      </div>
     </div>
    [% END %]
-    <div>[% timestamp %][% IF cached %] (cached)[% END %]</div>
+   [% IF sources.size %]
+    <p>
+      Quellen: <ul>
+      [% FOR s IN sources %]
+        <li>
+          [% IF s.href %]<a href="$s.href">[% IF s.title -%]
+          $s.title[% ELSE %]$s.href[% END %]</a>[% ELSE %]$s.title[% END %]
+        </li>
+      [% END %]
+    </ul>
+    </p>
+   [% END %]
+   [% IF timestamp %]
+    <div>Stand: [% timestamp %][% IF cached %] (cached)[% END %]</div>
+   [% END %]
   </div>
   </div> <!-- wrapper -->
  </body>

@@ -38,8 +38,9 @@
    </p>
    [% END %]
 
-   [% SET opac = uri.gbv_opac %] 
-   [% IF opac AND opac.foaf_homepage %]
+   [% SET opacs = uri.gbv_opac_ %] 
+   [% FOREACH opac IN opacs %]
+   [% IF opac.foaf_homepage %]
     [% IF opac.str.match('^http://uri.gbv.de/database/') %]
      <h3><a href="$opac.href">Katalog</a></h3>
     [% ELSE %]
@@ -61,6 +62,7 @@
       [% END %]
      </dl>
     [% END %]
+   [% END %]
    [% END %]
 
    [% wikipedia=uri.foaf_isPrimaryTopicOf %]

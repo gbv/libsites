@@ -26,5 +26,6 @@ www:
     - RDF::NS
     - RDF::Trine
     - Try::Tiny
+    - Turtle::Writer
     - URI
     - URI::Escape

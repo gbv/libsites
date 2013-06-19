@@ -1,15 +1,19 @@
 #!/usr/bin/perl
-#ABSTRACT: Konvertiert ISIL-Verzeichnis in PICA+ nach RDF/JSON-LD
+#ABSTRACT: Konvertiert ISIL-Verzeichnis in PICA+ nach RDF/Turtle
 use v5.14;
 use autodie;
 use JSON;
 
 use PICA::Parser;
+use Turtle::Writer;
+use RDF::NS;
 
 # Zur Dokumentation des PICA+ Format des ISIL-Verzeichnis siehe
 # http://sigel.staatsbibliothek-berlin.de/vergabe/adressenformat/
 
 binmode \*STDOUT, 'utf8';
+
+say RDF::NS->new->TTL(qw(foaf dc gbv org geo));
 
 sub grepsf {
     my ($p, $m) = @_;
@@ -26,13 +30,16 @@ PICA::Parser->new->parsefile( \*STDIN, Record => sub {
 
     my $rdf = {
         '@id' => "http://uri.gbv.de/organization/isil/$isil",
-        'dc:identifier' => (@moreisil ? [ $isil, @moreisil ] : $isil ),
+        'dc:identifier' => ( @moreisil ?
+            [ map { turtle_literal($_) } $isil, @moreisil ]
+              : turtle_literal($isil) 
+        ),
         'rdf:type' => [ 'daia:Institution', 'frbr:CorporateBody', 'foaf:Organization' ],
-        'owl:sameAs' => "http://lobid.org/organisation/$isil", 
+        'owl:sameAs' => "<http://lobid.org/organisation/$isil>", 
     };
 
-    ($rdf->{'foaf:name'})   = $p->sf('029A$a');
-    ($rdf->{'dbprop:shortName'}) = grepsf($p,'029@$a[4=c]');
+    ($rdf->{'foaf:name'}) = map { turtle_literal($_) } $p->sf('029A$a');
+    ($rdf->{'dbprop:shortName'}) = map { turtle_literal($_) } grepsf($p,'029@$a[4=c]');
 
     my ($adr) = grep { $_->sf('p') ~~ 'j' and $_->sf('2') ~~ 'S' } $p->field('032P');
     if ($adr) {
@@ -40,17 +47,17 @@ PICA::Parser->new->parsefile( \*STDIN, Record => sub {
         if ($k && $l) {
             $rdf->{'geo:location'} = { 'geo:lat' => $l, 'geo:long' => $k };
         }
-        $rdf->{'gbv:address'} = "$a\n$e $b";
+        $rdf->{'gbv:address'} = turtle_literal("$a\n$e $b");
         # TODO: Ländercode in $d
-        $rdf->{'gbv:openinghours'} = $i;
+        $rdf->{'gbv:openinghours'} = turtle_literal($i);
     }
 
     my ($com) = grep { $_->sf('c') ~~ 'j' && $_->sf('a') ~~ 'S' } $p->field('035B');
     if ($com) {
         my ($d,$e,$f) = map { $com->sf($_) } qw(d e f);
         my $tel = "(+$d)-$e/$f";
-        ($rdf->{'foaf:phone'}) = "tel:+$tel" if $tel =~ /^[0-9()\/ -]+$/;
-        $rdf->{'foaf:mbox'} = $rdf->{'vcard:email'} = "mailto:".$com->sf('k');
+        ($rdf->{'foaf:phone'}) = "<tel:+$tel>" if $tel =~ /^[0-9()\/ -]+$/;
+        $rdf->{'foaf:mbox'} = $rdf->{'vcard:email'} = "<mailto:".$com->sf('k').">";
     }
     
     # TODO
@@ -63,16 +70,19 @@ PICA::Parser->new->parsefile( \*STDIN, Record => sub {
     # 035I$a : Leihverkehrsregion
     # 035I$c : Verbundsystem
 
-    ($rdf->{'vcard:url'})   = grepsf($p,'009Q$u[z=A]');
+    ($rdf->{'vcard:url'})   = map { "<$_>" } grepsf($p,'009Q$u[z=A]');
     $rdf->{'foaf:homepage'} = $rdf->{'vcard:url'};
 
     delete $rdf->{$_} for grep { !defined $rdf->{$_} } keys %$rdf;
-    print_jsonld( $rdf );
+
+    print_turtle( $rdf );
 } );
 
-sub print_jsonld {
+sub print_turtle {
     my $rdf = shift;
-    my $jsonld = { '@graph' => [ $rdf ] };
-    print to_json( $jsonld, { pretty => 1, canonical => 1 } );
+    use Data::Dumper;
+    say Dumper($rdf);
+    my $uri = delete $rdf->{'@id'};
+    say turtle_statement( $uri , %$rdf );
 }
 

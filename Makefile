@@ -1,14 +1,20 @@
-.PHONY: info zdb lobid opac update isil.csv
-.SUFFIXES: .txt .pica .json .nt
+.PHONY: info zdb lobid opac update sites isil.csv
+.SUFFIXES: .txt .pica .nt .ttl
 
-TXT  = $(shell find isil -name '*.txt')
 PICA = $(shell find isil -name '*.pica')
-JSON = $(shell find isil -name '*.txt' -o -name '*.pica' | sed s/pica/json/ | sed s/txt/json/)
-NT   = $(shell find isil -name '*.json' | sed s/json/nt/)
+TXT  = $(shell find isil -name '*.txt')
+PICATTL = $(shell find isil -name '*.pica' | sed s/pica/ttl/)
+TXTTTL = $(shell find isil -name '*.txt' | sed s/txt/ttl/)
 
 info:
 	@find isil/* -mindepth 1 -printf '%f\n' | sort | uniq -c
 	@find isil/* -type d -empty
+
+sites: $(TXTTTL)
+
+zdbttl: $(PICATTL)
+
+zdb: zdb zdbttl
 
 zdb:
 	@ls ./isil | xargs ./app/getzdb.pl
@@ -21,41 +27,23 @@ opacs:
 
 update: zdb lobid opacs
 	
-# convert all .txt and .pica to .json
-json: $(JSON)
+###############################################################################
+# Create Turtle from PICA
+
+.pica.ttl:
+	@echo $< to $@
+	@./app/zdb2ttl.pl < $< > $@
 
 ###############################################################################
-# Create JSON-LD from PICA
+# Create Turtle from TXT
 
-.pica.json:
+.txt.ttl:
 	@echo $< to $@
-	@./app/zdb2rdf.pl < $< > $@
-	@./app/normalize.pl $@
-
-###############################################################################
-# Create JSON-LD from TXT
-
-.txt.json:
-	@echo $< to $@
-	@./app/txt2jsonld.pl $< > $@
-	@./app/normalize.pl $@
-
-###############################################################################
-# Create N-Triples from JSON-LD
-
-nt: $(NT)
-
-.json.nt:
-	@echo $< to $@
-	@node app/jsonld2nt.js $< context.json > $@
+	@./app/txt2ttl.pl $< > $@
 
 ###############################################################################
 # Extract from RDF (TODO: CREATE BEACON FILE)
-
-shortnames: $(NT)
-	@grep -r short isil/*/*.nt
-# TODO: nt2beacon
-
+# ...
 ###############################################################################
 
 isil.csv:
@@ -64,8 +52,5 @@ isil.csv:
 ###############################################################################
 
 clean:
-	@find isil -iname *.json -o -iname *.nt -o -iname *.pica -exec rm '{}' ';'
-
-normalize:
-	@find -iname *.json -exec ./app/normalize.pl '{}' ';'	
+	@find isil -o -iname *.nt -o -iname *.pica -exec rm '{}' ';'
 

@@ -8,13 +8,9 @@ getzdb.pl
   : Läd Eintrag aus dem ISIL-Verzeichnis des ZDB und speichert diese
     als PICA-Datei (`zdbpica.pica`) und als NTriples-Datei (`zdbrdf.nt`).
 
-isildir2rdf.pl
-  : Konvertiert PICA+ aus dem ISIL-Verzeichnis nach RDF
+zdb2ttl.pl
+  : Konvertiert PICA+ aus dem ISIL-Verzeichnis nach RDF/Turtle
 
-txt2jsonld.pl
-  : Parst eine sites.txt-Datei und erzeugt daraus JSON-LD
-
-normalize.pl
-  : Normalisiert JSON-LD
-
+txt2ttl.pl
+  : Parst eine sites.txt-Datei und erzeugt daraus Turtle
 

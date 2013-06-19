@@ -82,21 +82,38 @@ sub call {
     # combine RDF files
     my $model = RDF::Trine::Model->new;
 
+    my %rdffiles = ();
+
     my @files = grep { 
         $_ =~ /\.(\w+)$/ && $1 =~ $self->file_types;
     } readdir $dirhandle;
     closedir $dirhandle;
 
+    my $size = 0;
+    my $lastmtime = 0;
     foreach my $file (@files) {
         my $parser = RDF::Trine::Parser->guess_parser_by_filename( $file );
-        $file = catfile( $dir, $file );
+        my $absfile = catfile($dir,$file);
 
-        # TODO: this may fail
-        $parser->parse_file_into_model( $uri, $file, $model );
+        my $mtime =(stat($absfile))[9];
+        my $about = $rdffiles{$file} = { mtime => $mtime };
+        $lastmtime = $mtime if $mtime > $lastmtime;
+
+        eval { 
+            $parser->parse_file_into_model( $uri, $absfile, $model ); 
+        };
+        if ($@) {
+            $about->{error} = $@;
+        } else {
+            $about->{size} = $model->size - $size;
+            $size = $model->size; 
+        }
     }
+    $env->{'rdf.files'} = \%rdffiles;
+    $env->{'rdf.files.mtime'} = $lastmtime;
+
 
     my $iter = $model->as_stream;
-
 
     # add listing on base URI
     if ( $path eq '' and $self->index_property ) {
@@ -250,6 +267,24 @@ directory. Enable this option to also serve RDF data from this location.
 RDF property to use for listing all resources connected to the base URI (if
 <include_index> is enabled).  Set to C<rdfs:seeAlso> by default. Can be
 disabled by setting a false value.
+
+=back
+
+=head1 PSGI environment variables
+
+The following PSGI environment variables are set:
+
+=over 4
+
+=item rdf.files
+
+An hash of source filenames, each with the number of triples (on success)
+as property C<size>, an error message as C<error> if parsing failed, and
+the timestamp of last modification as C<mtime>.
+
+=item rdf.files.mtime
+
+Maximum value of all last modification times.
 
 =back
 
