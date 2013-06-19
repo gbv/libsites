@@ -65,11 +65,13 @@
    [% END %]
    [% END %]
 
+<!--
    [% wikipedia=uri.foaf_isPrimaryTopicOf %]
    [% IF wikipedia %]
      <h3>Weitere Informationen</h3>
      <p><a href="$wikipedia.href" title="Artikel in Wikipedia">Artikel in Wikipedia</a></p>
    [% END %]
+-->
 
    [% sites = uri.org_hasSite_ %]
    [% IF sites.size %]
