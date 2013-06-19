@@ -13,7 +13,7 @@ use RDF::NS;
 
 binmode \*STDOUT, 'utf8';
 
-say RDF::NS->new->TTL(qw(foaf dc gbv org geo));
+say $_ for RDF::NS->new->TTL(qw(foaf dc gbv org geo owl dbprop vcard rdf daia frbr));
 
 sub grepsf {
     my ($p, $m) = @_;
