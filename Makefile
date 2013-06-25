@@ -32,7 +32,7 @@ update: zdb lobid opacs
 
 .pica.ttl:
 	@echo $< to $@
-	@./app/zdb2ttl.pl < $< > $@
+	@./app/zdb2ttl.pl $< > $@
 
 ###############################################################################
 # Create Turtle from TXT

@@ -9,6 +9,7 @@ use Turtle::Writer;
 use RDF::NS;
 
 my $sites = { };
+my %tels = ();
 my (%cur, $address, $hours, $info, $sep);
 my $isil = "";
 
@@ -64,6 +65,7 @@ while(<>) {
         my $tel = $_;
         $tel =~ s/\s+/-/g;
         $cur{'foaf:phone'} = "<tel:$tel>";
+        $tels{ "tel:$tel" } = { "rdf:value" => turtle_literal($tel) };
         $sep=1;
     } elsif ($_ =~ qr{(\d\d:\d\d|Uhr)} and $_ =~ qr{(Mo|Di|Mi|Do|Fr|Sa|So)}) {
         $hours = $hours ? "$hours\n$_" : $_;
@@ -84,16 +86,17 @@ delete $_->{'@id'} for values %$sites;
 
 if ($isil) {
     $isil = "http://uri.gbv.de/organization/isil/$isil";
-#    $sites->{$isil} //= { '@id' => $isil };
-    my @has = map { "<$_>" } grep { $_ ne $isil } keys %$sites;
+    my @has = map { "<$_>" } grep { $_ ne $isil && $_ ne "" } keys %$sites;
     $sites->{$isil}->{'org:hasSite'} = \@has if @has;
 }
 
-say RDF::NS->new->TTL(qw(foaf dc gbv org geo));
+say $_ for (RDF::NS->new->TTL(qw(foaf dc gbv org geo rdf)),'');
 
 foreach (keys %$sites) {
     say turtle_statement("<$_>",
         %{ $sites->{$_} }
     );
 }
+
+say turtle_statement("<$_>", %{$tels{$_}}) for keys %tels;
 

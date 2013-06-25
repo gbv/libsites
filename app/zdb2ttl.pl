@@ -22,7 +22,7 @@ sub grepsf {
     map { $_->sf($s) } grep { $_->sf($t) eq $v } $p->field($f);
 }
 
-PICA::Parser->new->parsefile( \*STDIN, Record => sub {
+PICA::Parser->new->parsefile( $ARGV[0], Record => sub {
     my $p = shift;
 
     my ($isil)  = $p->sf('008H$e') or return;
