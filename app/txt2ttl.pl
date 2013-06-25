@@ -12,11 +12,14 @@ my $sites = { };
 my %tels = ();
 my (%cur, $address, $hours, $info, $sep);
 my $isil = "";
+my $mainisil;
 
 my $ISIL = qr{([A-Z]+-[A-Za-z0-9-]+)};
 
 if (@ARGV and $ARGV[0] =~ $ISIL) {
-    $isil = $1;
+    $mainisil = $isil = $1;
+} else {
+    die "Input file must be located in ISIL directory\n";
 }
 
 sub fail($) { 
@@ -33,7 +36,7 @@ sub finish {
     $cur{'gbv:address'} = turtle_literal($address) if $address;
     $cur{'dc:description'} = turtle_literal($info) if $info;
 
-    my $sst = $cur{'@id'};
+    my $sst = $cur{'@id'} // fail("missing ISIL");
     $sites->{ $sst } = { %cur };
     ($address, $hours, $info, $sep, %cur) = ("","","",0,()); 
     delete $cur{'foaf:name'};
@@ -41,11 +44,17 @@ sub finish {
 
 my $ISIL = '[A-Z]{2}-[A-Za-z0-9-]{1,11}';
 
-while(<>) {
-    s/^\s+|\s+$//g;
+open IN, '<:encoding(UTF-8)', $ARGV[0] or die $!;
+binmode STDOUT, 'encoding(UTF-8)';
+
+while(<IN>) {
+    s/^\s+|\s+$//g; # TODO: remove BOMB
     next if /^#/; # comment
 
-    if ($_ and $_ =~ qr{^($ISIL)?(@(.*))?$}) {
+    if ($_ eq "@") {
+        finish if (%cur);
+        $cur{'@id'} = "http://uri.gbv.de/organization/isil/$mainisil"; 
+    } elsif ($_ and $_ =~ qr{^($ISIL)?(@(.*))?$}) {
         my $sst = $1 // $isil // fail "Missing ISIL for identifier: $_";
         $sst = "http://uri.gbv.de/organization/isil/$sst" . ($3 ? $2 : '');
         finish;
@@ -86,17 +95,11 @@ delete $_->{'@id'} for values %$sites;
 
 if ($isil) {
     $isil = "http://uri.gbv.de/organization/isil/$isil";
-    my @has = map { "<$_>" } grep { $_ ne $isil && $_ ne "" } keys %$sites;
+    my @has = map { "<$_>" } grep { $_ ne $isil } keys %$sites;
     $sites->{$isil}->{'org:hasSite'} = \@has if @has;
 }
 
 say $_ for (RDF::NS->new->TTL(qw(foaf dc gbv org geo rdf)),'');
-
-foreach (keys %$sites) {
-    say turtle_statement("<$_>",
-        %{ $sites->{$_} }
-    );
-}
-
+say turtle_statement("<$_>", %{$sites->{$_}}) for keys %$sites;
 say turtle_statement("<$_>", %{$tels{$_}}) for keys %tels;
 
