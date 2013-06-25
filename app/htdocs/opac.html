@@ -1,0 +1,23 @@
+[% IF opac.foaf_homepage %]
+    [% IF opac.str.match('^http://uri.gbv.de/database/') %]
+     <h3><a href="$opac.href">Katalog</a></h3>
+    [% ELSE %]
+     <h3>Katalog</h3>
+    [% END %]
+    <p><a href="$opac.foaf_homepage.href">
+      [% IF opac.dcterms_title %]$opac.dcterms_title[% ELSE %]$opac.foaf_homepage.href[% END %]
+    </a></p>
+    [% IF opac.gbv_dbkey or opac.gbv_srubase %]
+     <h3>Schnittstellen</h3>
+     <dl>
+      [% IF opac.gbv_dbkey %]
+       <dt class="inline">unAPI-key</dt>
+       <dd><code><a href="http://unapi.gbv.de/about">$opac.gbv_dbkey</a></code></dd>
+      [% END %]
+      [% IF opac.gbv_srubase %]
+       <dt class="inline"><abbr title="Search/Retrieval via URL">SRU</abbr></dt>
+       <dd><code><a href="$opac.gbv_srubase">$opac.gbv_srubase</a></code></dd>
+      [% END %]
+     </dl>
+    [% END %]
+[% END %]

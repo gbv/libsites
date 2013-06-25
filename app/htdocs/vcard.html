@@ -27,8 +27,7 @@
    <p>
      [% FOREACH t IN tels %]
        [% IF NOT loop.first %]<br>[% END %]
-       [% IF t.type('vcard:Voice') %]<b>Tel:</b> [% ELSIF
-        t.type('vcard:Fax') %]<b>Fax:</b> [% END %]
+       [% IF t.type('vcard:Fax') %]<b>Fax:</b> [% ELSE %]<b>Tel:</b> [% END %]
        [% IF t.rdf_value %]$t.rdf_value[% ELSE %]$t[% END %]
      [% END %]
    </p>
