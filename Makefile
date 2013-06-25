@@ -25,7 +25,7 @@ lobid:
 opacs:
 	@ls ./isil | xargs ./app/getopac.pl
 
-update: zdb lobid opacs
+update: zdb lobid opacs sites
 	
 ###############################################################################
 # Create Turtle from PICA

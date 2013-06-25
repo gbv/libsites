@@ -44,15 +44,16 @@ sub finish {
 
 my $ISIL = '[A-Z]{2}-[A-Za-z0-9-]{1,11}';
 
-open IN, '<:encoding(UTF-8)', $ARGV[0] or die $!;
-binmode STDOUT, 'encoding(UTF-8)';
+# open IN, '<:encoding(UTF-8)', $ARGV[0] or die $!;
+# binmode STDOUT, 'encoding(UTF-8)';
 
-while(<IN>) {
-    s/^\s+|\s+$//g; # TODO: remove BOMB
+while(<>) {
+    s/^\s+|^\xEF\xBB\xBF|\s+$//g;
     next if /^#/; # comment
 
+    # say "# $_";
     if ($_ eq "@") {
-        finish if (%cur);
+        finish;
         $cur{'@id'} = "http://uri.gbv.de/organization/isil/$mainisil"; 
     } elsif ($_ and $_ =~ qr{^($ISIL)?(@(.*))?$}) {
         my $sst = $1 // $isil // fail "Missing ISIL for identifier: $_";
