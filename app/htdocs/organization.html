@@ -26,6 +26,10 @@
     <p><b>Kurzbezeichnung:</b> [% uri.dbprop_shortName %]</p>
    [% END %]
 
+   [% IF uri.dc_description %]
+    <p><em>[% uri.dc_description %]</em></p>
+   [% END %]
+
    [% IF uri.hcterms_hasCard %]
      [% INCLUDE vcard.html vcard=uri.hcterms_hasCard %]
    [% ELSE %]
