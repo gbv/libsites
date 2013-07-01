@@ -17,13 +17,13 @@ zdbttl: $(PICATTL)
 zdb: getzdb zdbttl
 
 getzdb:
-	@ls ./isil | xargs ./app/getzdb.pl
+	@ls ./isil | xargs ./bin/getzdb.pl
 	
 lobid:
-	@ls ./isil | xargs ./app/getlobid.pl
+	@ls ./isil | xargs ./bin/getlobid.pl
 
 opacs:
-	@ls ./isil | xargs ./app/getopac.pl
+	@ls ./isil | xargs ./bin/getopac.pl
 
 update: zdb lobid opacs sites
 	
@@ -32,14 +32,14 @@ update: zdb lobid opacs sites
 
 .pica.ttl:
 	@echo $< to $@
-	@./app/zdb2ttl.pl $< > $@
+	@./bin/zdb2ttl.pl $< > $@
 
 ###############################################################################
 # Create Turtle from TXT
 
 .txt.ttl:
 	@echo $< to $@
-	@./app/txt2ttl.pl $< > $@
+	@./bin/txt2ttl.pl $< > $@
 
 ###############################################################################
 # Extract from RDF (TODO: CREATE BEACON FILE)

@@ -1,4 +1,5 @@
-* org:hasSite umkehren
+* Automatisches Update, falls sich eine Datei geändert hat
+
 * elnilnmap.csv integrieren (CBS-Abzug)
 
 * sstmap integrieren

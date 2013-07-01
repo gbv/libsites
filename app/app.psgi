@@ -114,16 +114,23 @@ builder {
             return $app->($env) 
                 unless $env->{'negotiate.format'} eq 'html';
             $env->{'negotiate.format'} = 'nt';
-            Plack::Util::response_cb( $app->($env), sub {
+
+            my $res = $app->($env);
+            if ($env->{'rdf.iterator') {
+                # TODO: get via $env->{'rdf.iterator'} to avoid re-parsing
+            } # else
+
+            Plack::Util::response_cb( $res, sub {
                 my $res = shift;
                 my $uri = $env->{'rdf.uri'};
 
-                # TODO: get via $env->{'rdf.data'} to avoid re-parsing
-                my $rdf = RDF::Trine::Model->new;
                 if ($res->[0] eq '200') {
+                    my $rdf = RDF::Trine::Model->new;
+
                     my $parser = RDF::Trine::Parser->new('ntriples');
                     my $data = join '', @{$res->[2]};
                     $parser->parse_into_model( $uri, $data, $rdf );
+
                     my $lazy = RDF::Lazy->new( $rdf, namespaces => $NS );
 
                     $env->{'tt.vars'}->{uri} = $lazy->resource($uri);
