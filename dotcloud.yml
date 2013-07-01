@@ -7,7 +7,7 @@ www:
     perl_version: v5.14.x
 
   # Required non-core modules in Perl v5.14.0
-  requirements: 
+  requirements:
     - CHI
     - Data::Beacon
     - File::ShareDir
@@ -17,6 +17,7 @@ www:
     - Log::Contextual
     - PICA::Record
     - Plack
+    - Plack::App::RDF::Files
     - Plack::Middleware::RDF::Flow
     - Plack::Middleware::Rewrite
     - Plack::Middleware::TemplateToolkit

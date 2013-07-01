@@ -53,18 +53,5 @@ Die weitere Steuerung ist bereits in `.htaccess`-Dateien hinterlegt.
 ## Requirements
 
 * Make
-* Perl >= 5.14
-* Perl CPAN modules
-  * JSON
-  * File::Slurp
-  * PICA::Record >= 0.584
-  * RDF::NS
-  * RDF::Lazy
-  * RDF::Trine
-  * Plack::Middleware::TemplateToolkit
-  * CHI
-* nodejs with package `jsonld` (TODO: entfernen)
-  * `sudo aptitude install node npm`
-  * `cd app`
-  * `npm install jsonld`
+* Perl >= 5.14 and Perl CPAN modules listed in dotcloud.yml
 

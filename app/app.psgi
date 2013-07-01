@@ -6,6 +6,7 @@ use File::Basename qw(dirname);
 use lib rel2abs(catdir(dirname($0),'lib'));
 
 use Time::Piece;
+use List::Util qw(max);
 
 use Plack::Builder;
 use Plack::Util;
@@ -128,8 +129,9 @@ builder {
                     $env->{'tt.vars'}->{uri} = $lazy->resource($uri);
                     $env->{'tt.vars'}->{javascript} = [ 'OpenLayers.js' ];
                     $env->{'tt.vars'}->{sources} = [ rdfsources( $env->{'rdf.files'}, $uri ) ];
-                    $env->{'tt.vars'}->{timestamp} = 
-                        localtime($env->{'rdf.files.mtime'})->strftime;
+                    $env->{'tt.vars'}->{timestamp} = localtime(
+                            max map { $_->{mtime} } values %{$env->{'rdf.files'}}
+                        )->strftime;
 
                     $env->{'tt.path'} = '/organization.html';   
                 } else {
