@@ -2,9 +2,9 @@
 use v5.14;
 
 foreach (@ARGV) {
-    system("./app/getzdb.pl $_");
-    system("./app/getlobid.pl $_");
-    system("./app/getopac.pl $_");
-    system("./app/txt2ttl.pl isil/$_/sites.txt > isil/$_/sites.ttl");
-    system("./app/zdb2ttl.pl isil/$_/zdb.pica > isil/$_/zdb.ttl");
+    system("./bin/getzdb.pl $_");
+    system("./bin/getlobid.pl $_");
+    system("./bin/getopac.pl $_");
+    system("./bin/txt2ttl.pl isil/$_/sites.txt > isil/$_/sites.ttl");
+    system("./bin/zdb2ttl.pl isil/$_/zdb.pica > isil/$_/zdb.ttl");
 }
