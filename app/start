@@ -1,0 +1,20 @@
+#!/bin/sh
+
+WEBSERVER=starman
+WEBSERVER_ARGS=
+
+while getopts "dh?" opt; do
+    case "$opt" in
+        h|\?)
+            echo "usage: $0 [-d] [--] [plackup-arguments]" >&2
+            exit 0
+            ;;
+        d)
+    	    WEBSERVER=plackup
+    	    WEBSERVER_ARGS=-r
+            ;;
+    esac
+done
+shift $((OPTIND-1)) # Shift off the options and optional --.
+
+exec carton exec -- $WEBSERVER -Ilib $WEBSERVER_ARGS $@ 

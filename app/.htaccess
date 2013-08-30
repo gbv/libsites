@@ -1,7 +1,0 @@
-Order Deny,Allow 
-Deny from All 
- 
-<Files "app.cgi"> 
-  Order Deny,Allow 
-  Allow from All 
-</Files>
