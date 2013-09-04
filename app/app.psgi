@@ -12,7 +12,6 @@ builder {
     enable_if { $devel } 'Debug::TemplateToolkit';
     enable_if { $devel } 'SimpleLogger';
     enable_if { $devel } 'Log::Contextual', level => 'trace';
-    enable_if { !$devel } 'Log::Contextual', level => 'warn';
 
     GBV::App::Libsites->new(
         root  => rel2abs(catdir(dirname($0),'htdocs')),

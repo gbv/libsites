@@ -1,0 +1,25 @@
+language: perl
+perl:
+    - "5.19"
+    - "5.18"
+    - "5.16"
+    - "5.14"
+
+before_install:
+    - git config user.name 'Travis-CI'
+    - git config user.email 'travis@nowhere.dne'
+    - cd app
+
+install:
+    - cpanm --quiet --notest --skip-satisfied Carton
+    - make deps
+
+script:
+    - make test
+
+# TODO: coverage
+#after_success:
+#    - cpanm --quiet --notest --skip-satisfied Dist::Zilla::App::Command::cover Devel::Cover::Report::Coveralls
+#    - dzil cover -test && dzil cover -report coveralls
+
+env: RELEASE_TESTING=1 AUTOMATED_TESTING=1 AUTHOR_TESTING=1 PLACK_ENV=test

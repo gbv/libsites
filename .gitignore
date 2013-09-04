@@ -2,3 +2,4 @@ isil/**/*.json
 isil/**/*.nt
 isil/**/*.ttl
 isil/**/*.pica
+local/

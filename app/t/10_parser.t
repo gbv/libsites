@@ -12,6 +12,8 @@ is_deeply ($parser->next(), {
     description => 'some comment',
 });
 
+done_testing;
+
 __DATA__
 @
 Main Library
