@@ -1,5 +1,5 @@
-isil/**/*.json
-isil/**/*.nt
-isil/**/*.ttl
-isil/**/*.pica
+libsites-config/
 local/
+doc/*.pdf
+doc/*.html
+doc/*.tmp

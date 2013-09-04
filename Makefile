@@ -1,56 +1,20 @@
-.PHONY: info zdb zdbttl lobid opac update sites isil.csv
-.SUFFIXES: .txt .pica .nt .ttl
+deps:
+	@carton install --deployment
 
-PICA = $(shell find isil -name '*.pica')
-TXT  = $(shell find isil -name '*.txt')
-PICATTL = $(shell find isil -name '*.pica' | sed s/pica/ttl/)
-TXTTTL = $(shell find isil -name '*.txt' | sed s/txt/ttl/)
+test:
+	@carton exec -- prove -Ilib t
 
-info:
-	@find isil/* -mindepth 1 -printf '%f\n' | sort | uniq -c
-	@find isil/* -type d -empty
+#debian: clean deps
+#	@dzil debuild --uc --us
 
-sites: $(TXTTTL)
+doc:
+	@cd ../doc; make html pdf
 
-zdbttl: $(PICATTL)
-
-zdb: getzdb zdbttl
-
-getzdb:
-	@ls ./isil | xargs ./bin/getzdb.pl
-	
-lobid:
-	@ls ./isil | xargs ./bin/getlobid.pl
-
-opacs:
-	@ls ./isil | xargs ./bin/getopac.pl
-
-update: zdb lobid opacs sites
-	
-###############################################################################
-# Create Turtle from PICA
-
-.pica.ttl:
-	@echo $< to $@
-	@./bin/zdb2ttl.pl $< > $@
-
-###############################################################################
-# Create Turtle from TXT
-
-.txt.ttl:
-	@echo $< to $@
-	@./bin/txt2ttl.pl $< > $@
-
-###############################################################################
-# Extract from RDF (TODO: CREATE BEACON FILE)
-# ...
-###############################################################################
-
-isil.csv:
-	@ls isil > $@	
-
-###############################################################################
+# start in development mode
+run:
+	@exec carton exec -- plackup -r -Ilib
 
 clean:
-	@find isil -o -iname *.nt -o -iname *.pica -exec rm '{}' ';'
+	@rm -rf cover_db debuild cache
 
+.PHONY: deps test run debian cover doc clean

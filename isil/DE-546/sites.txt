@@ -1,7 +1,0 @@
-@magazin
-Magazin
- 
-@schl
-Standort Schlüterstrasse
-Schlüterstraße 1
-99086 Erfurt

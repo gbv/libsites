@@ -1,9 +1,0 @@
-# Configuration for file deployment at dotCloud
-
-www:
-  type: perl
-  approot: app
-  config:
-    perl_version: v5.14.x
-
-
