@@ -3,7 +3,7 @@ package GBV::App::Libsites;
 use v5.14.2;
 
 use parent 'Plack::Component';
-use Plack::Util::Accessor qw(app root isils);
+use Plack::Util::Accessor qw(root config app);
 
 use GBV::App::Logger;
 
@@ -20,6 +20,8 @@ use RDF::Lazy;
 use RDF::Trine::Model;
 use RDF::Trine::Parser;
 use Plack::Middleware::TemplateToolkit;
+use Plack::App::Directory::Template;
+
 #use CHI;
 
 sub rdfsources {
@@ -66,7 +68,6 @@ sub rdfsources {
 sub prepare_app {
     my $self = shift;
 
-    log_warn { "AAAAAAAAAA" };
     log_debug { "prepare_app" };
 
     my $html_app = Plack::Middleware::TemplateToolkit->new( 
@@ -77,9 +78,11 @@ sub prepare_app {
             request_vars => [qw(base)],
             404 => '404.html', 
             500 => '500.html',
+            INTERPOLATE  => 1,
+            PRE_PROCESS  => 'header.html',
+           POST_PROCESS => 'footer.html',
         );
     $html_app->prepare_app;
-
 
     $self->app( builder {
         enable 'Static', 
@@ -157,7 +160,7 @@ sub prepare_app {
         builder {
             mount '/isil' =>
                 Plack::App::RDF::Files->new( 
-                    base_dir => $self->isils,
+                    base_dir => $self->config . '/' . 'isil',
                     base_uri => 'http://uri.gbv.de/organization/isil/',
                     path_map => sub { $_ = shift; $_ =~ s/\@.+$//; $_ },
                 )->to_app;
@@ -168,6 +171,23 @@ sub prepare_app {
                 )->to_app;
         };
     });
+
+    $self->app(
+        builder {
+            mount '/config' =>
+                Plack::App::Directory::Template->new( # TODO: use App::GitWorkingCopy
+                    root         => $self->config,
+                    filter       => sub { $_[0]->{name} =~ qr{^[^.]|^\.\./$} ? $_[0] : () },
+                    templates    => $self->root,
+                    PROCESS      => 'directory.html',
+                    VARIABLES => { mount => '/..' },
+                    INTERPOLATE  => 1,
+                    PRE_PROCESS  => 'header.html',
+                    POST_PROCESS => 'footer.html',
+                )->to_app, 
+            mount '/' => $self->app;
+        }
+    );
 }
 
 sub call {

@@ -1,4 +1,4 @@
-package Catmandu::Importer::Libsites;
+package Catmandu::Importer::libsites;
 
 use namespace::clean;
 use Catmandu::Sane;

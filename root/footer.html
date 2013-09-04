@@ -1,7 +1,9 @@
 ﻿  </div>
   <div class="clearboth"><!-- --></div>
   <div id='footer'>
-   [%IF uri %]
+   [% IF error %]
+     &lt;<a href="${base}/">$base/</a>&gt;
+   [% ELSIF uri  %]
     &lt;<a href="${uri.href}">$uri</a>&gt;
     [% FOREACH f IN formats %]
       <a href="?format=$f">$f</a>
@@ -14,6 +16,7 @@
      </div>
     </div>
    [% END %]
+
    [% IF sources.size %]
     <p>
       Quellen: <ul>

@@ -1,5 +1,4 @@
-﻿[% INCLUDE header.html title = uri.foaf_name %]
-[% SET isil = uri.dc_identifier %]
+﻿[% SET isil = uri.dc_identifier %]
 <div itemscope itemtype="http://schema.org/[% isil ? "Library" : "Organization" %]" class="vcard">
    <!--[% INCLUDE feedback_notify.html %]-->
    <span style="display:none" itemprop="name" class="fn org">[% uri.foaf_name %]</span>
@@ -81,4 +80,3 @@
    </div>
 </div>
 <br style="clear:both;" />
-[% INCLUDE footer.html %]

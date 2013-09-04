@@ -12,7 +12,7 @@ use File::Slurp qw(write_file);
 sub getisil(@) {
     my %files = @_;
 
-    die "missing directory isil/\n" unless -d 'isil';
+    die "missing directory libsites-config/isil/\n" unless -d 'libsites-config/isil';
 
     foreach my $isil (@ARGV) {
         if ($isil !~ qr{^[a-zA-Z0-9:/-]+$}) {
@@ -29,7 +29,7 @@ sub getisil(@) {
                 next;
             }
     
-            my $path = "isil/$isil";
+            my $path = "libsites-config/isil/$isil";
             make_path $path;
             unless( -d $path ) {
                 say STDERR "couldn't create $path: $@";
