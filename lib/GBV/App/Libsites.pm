@@ -3,7 +3,7 @@ package GBV::App::Libsites;
 use v5.14.2;
 
 use parent 'Plack::Component';
-use Plack::Util::Accessor qw(root config app);
+use Plack::Util::Accessor qw(root config app isil);
 
 use GBV::App::Logger;
 
@@ -69,6 +69,9 @@ sub prepare_app {
     my $self = shift;
 
     log_debug { "prepare_app" };
+
+    $self->isil( $self->config . '/' . 'isil' );
+    $self->isil( '/dev/null' ) unless -d $self->isil;
 
     my $html_app = Plack::Middleware::TemplateToolkit->new( 
             INCLUDE_PATH => $self->root,
@@ -160,7 +163,7 @@ sub prepare_app {
         builder {
             mount '/isil' =>
                 Plack::App::RDF::Files->new( 
-                    base_dir => $self->config . '/' . 'isil',
+                    base_dir => $self->isil,
                     base_uri => 'http://uri.gbv.de/organization/isil/',
                     path_map => sub { $_ = shift; $_ =~ s/\@.+$//; $_ },
                 )->to_app;
