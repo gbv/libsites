@@ -70,8 +70,11 @@ sub prepare_app {
 
     log_debug { "prepare_app" };
 
+    # if config not exists: use dummy directoy
     $self->isil( $self->config . '/' . 'isil' );
-    $self->isil( '/dev/null' ) unless -d $self->isil;
+    $self->isil( $self->root . '/rdf' ) unless -d $self->isil;
+
+    say STDERR $self->isil ;
 
     my $html_app = Plack::Middleware::TemplateToolkit->new( 
             INCLUDE_PATH => $self->root,
