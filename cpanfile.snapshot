@@ -2969,6 +2969,20 @@ DISTRIBUTIONS
       Text::MicroTemplate 0.15
       parent 0
       perl 5.008001
+  Plack-Middleware-Log-Contextual-0.01
+    pathname: M/MI/MIYAGAWA/Plack-Middleware-Log-Contextual-0.01.tar.gz
+    provides:
+      Plack::Middleware::Log::Contextual 0.01
+      Plack::Middleware::Log::Contextual::Logger undef
+    requirements:
+      ExtUtils::MakeMaker 6.42
+      HTTP::Request::Common 0
+      Log::Contextual 0
+      Plack 0.997
+      Plack::Middleware::SimpleLogger 0
+      Test::More 0.88
+      Test::Requires 0
+      perl 5.008001
   Plack-Middleware-Rewrite-1.007
     pathname: A/AR/ARISTOTLE/Plack-Middleware-Rewrite-1.007.tar.gz
     provides:
