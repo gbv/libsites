@@ -169,10 +169,10 @@ richtet sich nach folgenden Regeln:
 
 ## Überprüfung der Konfiguration
 
-Unter <http://uri.gbv.de/organization/libsites-config> kann der
-aktuelle Stand der Konfiguration in der laufenden Webanwendung
-eingesehen und überprüft werden. Die Verzeichnisse enthalten
-zusätzlich temporäre Dateien (siehe [Datenquellen](#datenquellen)].
+Unter <http://uri.gbv.de/organization/config> kann der aktuelle Stand der
+Konfiguration in der laufenden Webanwendung eingesehen und überprüft werden.
+Die Verzeichnisse enthalten zusätzlich temporäre Dateien (siehe
+[Datenquellen](#datenquellen)].
 
 # Installation und Administration
 
@@ -202,3 +202,51 @@ Für jede Bibliothek sind folgende Dateien vorgesehen:
 * opac.ttl - Informationen zum Katalog der Bibliothek, geholt von
    <http://uri.gbv.de/database/> mit `app/getopac.pl`
 
+## Software-Entwicklung
+
+*Das folgende Kapitel ist nur für Entwickler relevant!*
+
+Die Webanwendung ist in Perl (ab Version 5.14.2) geschrieben und basiert u.A.
+auf [Plack], [Moo] und (geplant) [Catmandu]. Zur Verwaltung der benötigten
+CPAN-Module wird [Carton] verwendet. 
+
+[Plack]: https://metacpan.org/module/Plack
+[Moo]: https://metacpan.org/module/Moo
+[Carton]: https://metacpan.org/module/Carton
+[Catmandu]: https://metacpan.org/module/Catmandu
+
+### Datei-Übersicht
+
+    |-- app.psgi             Plack/PSGI Start-Datei
+    |-- cpanfile             Benötigte CPAN-Module
+    |-- cpanfile.snapshot    Genau verwendete CPAN-Module
+    |-- config/              Konfigurationsdateien zur Installation
+    |-- doc/                 Dieses Handbuch
+    |-- root/                Statische Dateien und Templates (HTML, CSS, ...)
+    |-- lib/                 Perl-Module der Webanwendung
+    |-- Makefile             Makefile 
+    |-- start                Skript zum Starten der Webanwendung mit Starman
+    |-- t/                   Unit-Tests
+    |-- test                 Skript zum Aufrufen der Unit-Tests
+    \-- .travis.yml          Konfigurationsdatei für CI-Tests auf travis-ci.org
+
+
+### Modul-Übersicht
+
+GBV::App::Libsites
+  : Webanwendung, wird von `app.psgi` aufgerufen.
+
+GBV::App::Libsites::Parser
+  : Parser für `sites.txt`
+
+Catmandu::Importer::Libsites
+  : aktiviert `GBV::App::Libsites::Parser` als Importer in [Catmandu]:
+
+        catmandu --convert Libsites to JSON < sites.txt
+
+### Unit-Tests
+
+    make tests
+
+Änderungen an <https://github.com/gbv/libsites> lösen automatisch
+einen Test auf <https://travis-ci.org/gbv/libsites> aus.
