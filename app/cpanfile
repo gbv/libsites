@@ -9,6 +9,7 @@ requires 'PICA::Record', '0';
 requires 'Plack', '0';
 requires 'Plack::App::RDF::Files', '0';
 requires 'Plack::Middleware::Rewrite', '0';
+requires 'Plack::Middleware::Debug', '0';
 requires 'Plack::Middleware::TemplateToolkit', '0';
 requires 'RDF::Dumper', '0';
 requires 'RDF::Flow', '0';
