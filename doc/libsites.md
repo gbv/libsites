@@ -124,19 +124,59 @@ Standortinformationen für die UB Hildesheim unter `isil/DE-Hil2/sites.txt`.
 
 ## Aufbau einer Konfigurationsdatei
 
-Die Datei `sites.txt` ist eine reine Textdatei in UTF-8-Kodierung, d.h.
-sie sollte *nicht* mit Excel, Word o.Ä. Office-Programmen bearbeitet werden.
-Die Datei wird zur Interpretation zeilenweise gelesen.
+Die Datei `sites.txt` ist eine reine Textdatei in UTF-8-Kodierung (d.h. sie
+sollte *nicht* mit Excel, Word o.Ä. Office-Programmen bearbeitet werden!). Die
+Datei wird zur Interpretation zeilenweise gelesen und enthält eine Liste von
+Standorten, die folgendermaßen aufgebaut ist:
 
-...TODO: Bestandteile...
+1. Jeder Standort wird durch eine Zeile eingeleitet in der als Identifer der
+   ISIL bzw. das Kürzel des Standorts steht. Der ISIL kann die Zeichenkette 
+   "`ISIL `" vorangestellt werden. Für die übergeordnete Einrichtung kann auch
+   das Kürzel '`@`' verwendet werden.
 
-<!--
-Neben dem Verzeichnis `isil` liegen im Verzeichnis [`bin`](./bin) verschiedene
-Programme zur Verwaltung der Standortinformationen und im Verzeichnis [`app`](/.app)
-die Webanwendung zur Anzeige und Auslieferung der RDF-Daten als Linked Open Data.
--->
+2. Die folgende Zeile enthält den Namen des Standortes.
+
+3. Alle anschließenden Zeile bis zum nächsten Standort-Identifier oder Dateiende
+   werden durch Muster überprüft, ob sie eine Email-Adresse, Homepage-URL, 
+   Koordinate, Telefonnummer oder Öffnungszeiten enthalten. Öffnungszeiten
+   können im Gegensatz zu den anderen Angaben auch mehrfach vorkommen.
+
+4. Solange kein Muster passt werden alle Zeilen bis zur ersten Leerzeile als 
+   Adresse interpretiert.
+
+4. Alle übrigen Zeilen werden als Kommentar oder Kurzbeschreibung des Standortes
+   interpretiert.
+
+Im Quellcode der Standortverwaltung befindet sich das Perl-Modul
+`GBV::App::Libsites::Parser` zum Einlesen des hier beschriebenen Textformates.
+Der Einfachkeit halber bietet es sich an, zum Anlegen neuer Einrichtungen von
+vorhandenen Konfigurationsdateien als Beispiel auszugehen. Die formale Syntax 
+richtet sich nach folgenden Regeln:
+
+    Identifier     ::= ISIL | Kürzel
+    ISIL           ::= 'ISIL '? [A-Z]{1,4} '-' [A-Za-z0-9/:-]+
+    Kürzel         ::= '@' [a-z0-9]*
+    EMail          ::= [^@ ]+ '@' [^@ ]+
+    Homepage       ::= 'http' 's'? '://' Char+
+    Koordinate     ::= [0-9]+ '.' [0-9] Whitespace* [,/;] Whitespace* 
+                       [0-9]+ '.' [0-9]
+    Telefon        ::= ( '+' | '(+' )? [0-9()/ -]+
+    Öffnungszeiten ::= ( ( [0-9][0-9] ':' [0-9][0-9] ) | 'Uhr' ) &&
+                       ( 'Mo' | 'Di' | 'Mi' | 'Do' | 'Fr' | 'Sa' | 'So' )
+
+
+<!-- TODO: Skript und/oder Webapi zum Parsen und Überprüfen -->
+
+## Überprüfung der Konfiguration
+
+Unter <http://uri.gbv.de/organization/libsites-config> kann der
+aktuelle Stand der Konfiguration in der laufenden Webanwendung
+eingesehen und überprüft werden. Die Verzeichnisse enthalten
+zusätzlich temporäre Dateien (siehe [Datenquellen](#datenquellen)].
 
 # Installation und Administration
+
+[Installation]: #installation-und-administration
 
 Die Webanwendung der VZG-Standortverwaltung wird in einem git-Repository
 verwaltet, das auf GitHub unter <https://github.com/gbv/libsites> einsehbar
@@ -149,7 +189,7 @@ Debian-Paket erstellt.
 * Perl >= 5.14 and Perl CPAN modules listed in dotcloud.yml
 * ...
 
-## Übersicht 
+## Datenquellen
 
 Für jede Bibliothek sind folgende Dateien vorgesehen:
 
