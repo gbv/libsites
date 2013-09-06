@@ -5,6 +5,10 @@ perl:
     - "5.16"
     - "5.14"
 
+matrix:
+  allow_failures:
+    perl: "5.19"
+
 before_install:
     - git config user.name 'Travis-CI'
     - git config user.email 'travis@nowhere.dne'
