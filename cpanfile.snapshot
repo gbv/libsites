@@ -354,6 +354,27 @@ DISTRIBUTIONS
       YAML::Any 0.81
       namespace::clean 0.24
       perl v5.10.1
+  Catmandu-PICA-0.03
+    pathname: V/VO/VOJ/Catmandu-PICA-0.03.tar.gz
+    provides:
+      Catmandu::Fix::pica_map 0.03
+      Catmandu::Importer::PICA 0.03
+      Catmandu::PICA 0.03
+      Catmandu::PICAplus 0.03
+    requirements:
+      Catmandu 0.7
+      ExtUtils::MakeMaker 6.30
+      XML::LibXML::Reader 2.0
+  Catmandu-RDF-0.03
+    pathname: V/VO/VOJ/Catmandu-RDF-0.03.tar.gz
+    provides:
+      Catmandu::Exporter::RDF 0.03
+      Catmandu::RDF 0.03
+    requirements:
+      Catmandu 0.7
+      ExtUtils::MakeMaker 6.30
+      RDF::NS 20130816
+      RDF::Trine 1.0
   Class-Accessor-0.34
     pathname: K/KA/KASEI/Class-Accessor-0.34.tar.gz
     provides:
@@ -4496,6 +4517,54 @@ DISTRIBUTIONS
       Test::More 0
       XML::NamespaceFactory 0
       version 0
+  XML-LibXML-2.0106
+    pathname: S/SH/SHLOMIF/XML-LibXML-2.0106.tar.gz
+    provides:
+      XML::LibXML 2.0106
+      XML::LibXML::Attr 2.0106
+      XML::LibXML::AttributeHash 2.0106
+      XML::LibXML::Boolean 2.0106
+      XML::LibXML::CDATASection 2.0106
+      XML::LibXML::Comment 2.0106
+      XML::LibXML::Common 2.0106
+      XML::LibXML::Devel 2.0106
+      XML::LibXML::Document 2.0106
+      XML::LibXML::DocumentFragment 2.0106
+      XML::LibXML::Dtd 2.0106
+      XML::LibXML::Element 2.0106
+      XML::LibXML::ErrNo 2.0106
+      XML::LibXML::Error 2.0106
+      XML::LibXML::InputCallback 2.0106
+      XML::LibXML::Literal 2.0106
+      XML::LibXML::NamedNodeMap 2.0106
+      XML::LibXML::Namespace 2.0106
+      XML::LibXML::Node 2.0106
+      XML::LibXML::NodeList 2.0106
+      XML::LibXML::Number 2.0106
+      XML::LibXML::PI 2.0106
+      XML::LibXML::Pattern 2.0106
+      XML::LibXML::Reader 2.0106
+      XML::LibXML::RegExp 2.0106
+      XML::LibXML::RelaxNG 2.0106
+      XML::LibXML::SAX 2.0106
+      XML::LibXML::SAX::AttributeNode 2.0106
+      XML::LibXML::SAX::Builder 2.0106
+      XML::LibXML::SAX::Generator 2.0106
+      XML::LibXML::SAX::Parser 2.0106
+      XML::LibXML::Schema 2.0106
+      XML::LibXML::Text 2.0106
+      XML::LibXML::XPathContext 2.0106
+      XML::LibXML::XPathExpression 2.0106
+      XML::LibXML::_SAXParser 2.0106
+    requirements:
+      ExtUtils::MakeMaker 6.56
+      Test::More 0
+      XML::NamespaceSupport 1.07
+      XML::SAX 0.11
+      base 0
+      strict 0
+      vars 0
+      warnings 0
   XML-Namespace-0.02
     pathname: A/AB/ABW/XML-Namespace-0.02.tar.gz
     provides:

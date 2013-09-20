@@ -1,0 +1,3 @@
+#!/bin/bash
+
+exec carton exec -- perl -Ilib local/bin/catmandu $@

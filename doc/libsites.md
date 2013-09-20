@@ -181,13 +181,11 @@ Die Verzeichnisse enthalten zusätzlich temporäre Dateien (siehe
 Die Webanwendung der VZG-Standortverwaltung wird in einem git-Repository
 verwaltet, das auf GitHub unter <https://github.com/gbv/libsites> einsehbar
 ist. Für Installation und Updates wird aus dem Quelltext der Anwendung ein
-Debian-Paket erstellt.
-
-## Anforderungen
-
-* Make
-* Perl >= 5.14 and Perl CPAN modules listed in dotcloud.yml
-* ...
+Debian-Paket erstellt, das sich auf einem beliebigen Produktiv- oder Testsystem
+mit gleicher Systemarchitektur installieren lässt. Die Webanwendung ist
+möglichst mit [Unit-Tests](#unit-tests) abgedeckt, die bei einem Push nach
+GitHub automatisch unter <https://travis-ci.org/gbv/libsites> ausgeführt
+werden.
 
 ## Datenquellen
 
@@ -202,12 +200,12 @@ Für jede Bibliothek sind folgende Dateien vorgesehen:
 * opac.ttl - Informationen zum Katalog der Bibliothek, geholt von
    <http://uri.gbv.de/database/> mit `app/getopac.pl`
 
+## Updates der Konfiguration
+
 ## Software-Entwicklung
 
-*Das folgende Kapitel ist nur für Entwickler relevant!*
-
 Die Webanwendung ist in Perl (ab Version 5.14.2) geschrieben und basiert u.A.
-auf [Plack], [Moo] und (geplant) [Catmandu]. Zur Verwaltung der benötigten
+auf [Plack], [Moo] und [Catmandu] (geplant). Zur Verwaltung der benötigten
 CPAN-Module wird [Carton] verwendet. 
 
 [Plack]: https://metacpan.org/module/Plack
@@ -237,16 +235,35 @@ GBV::App::Libsites
   : Webanwendung, wird von `app.psgi` aufgerufen.
 
 GBV::App::Libsites::Parser
-  : Parser für `sites.txt`
+  : Parser für `sites.txt` Format.
 
 Catmandu::Importer::Libsites
-  : aktiviert `GBV::App::Libsites::Parser` als Importer in [Catmandu]:
+  : Aktiviert `GBV::App::Libsites::Parser` als Importer in [Catmandu]:
 
-        catmandu --convert Libsites to JSON < sites.txt
+        ./catmandu convert libsites to YAML < sites.txt
+
+## Voraussetzungen
+
+Zur Weiterentwicklung der Webanwendung werden benötigt:
+
+* Grundlegende Build-Tools (GNU make, C-Compiler etc.)
+* Debian-Paket-Tools (devscripts und debhelper)
+* git
+* Perl (mind. 5.14)
+* [Carton] (mind. 1.0) und cpanm (mind. 1.6)
+
+Die benötigten Programme lassen sich unter Ubuntu folgendermaßen installieren:
+
+    sudo apt-get install build-essential devscripts debhelper git-core perl
+    wget -O - http://cpanmin.us | sudo perl - --self-upgrade
+    sudo cpanm Carton
+
+Alle verwendeten CPAN-Module sind in der Datei `cpanfile` (bzw.
+`cpanfile.snapshot`) aufgelistet und lassen sich mit `carton install` (bzw.
+`carton install --deployment`) ins Verzeichnis `local/` installieren.
 
 ### Unit-Tests
 
     make tests
 
-Änderungen an <https://github.com/gbv/libsites> lösen automatisch
-einen Test auf <https://travis-ci.org/gbv/libsites> aus.
+

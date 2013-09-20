@@ -12,6 +12,10 @@ requires 'Plack::Middleware::TemplateToolkit', '>= 0.26';
 requires 'Plack::App::Directory::Template', '>= 0.26';
 requires 'Plack::App::RDF::Files', '0';
 
+# Catmandu modules
+requires 'Catmandu::RDF', '0.03';
+requires 'Catmandu::PICA', '>= 0.01';
+
 requires 'CHI', '0';
 requires 'Data::Beacon', '0';
 requires 'File::Slurp', '0';
