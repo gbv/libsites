@@ -202,20 +202,23 @@ Für jede Bibliothek sind folgende Dateien vorgesehen:
 
 ## Updates der Konfiguration
 
-## Software-Entwicklung
+# Software-Entwicklung
 
 Die Webanwendung ist in Perl (ab Version 5.14.2) geschrieben und basiert u.A.
-auf [Plack], [Moo] und [Catmandu] (geplant). Zur Verwaltung der benötigten
-CPAN-Module wird [Carton] verwendet. 
+auf [Plack], [Moo] und [Catmandu]. Zur Verwaltung der benötigten CPAN-Module
+wird [Carton] verwendet. 
 
 [Plack]: https://metacpan.org/module/Plack
 [Moo]: https://metacpan.org/module/Moo
 [Carton]: https://metacpan.org/module/Carton
 [Catmandu]: https://metacpan.org/module/Catmandu
 
-### Datei-Übersicht
+## Datei-Übersicht
+
+Im Wurzelverzeichnis befinden sich folgende Dateien und Unterverzeichnisse:
 
     |-- app.psgi             Plack/PSGI Start-Datei
+    |-- catmandu             Hilfs-Skript zum Ausführen von Catmandu mit Carton
     |-- cpanfile             Benötigte CPAN-Module
     |-- cpanfile.snapshot    Genau verwendete CPAN-Module
     |-- config/              Konfigurationsdateien zur Installation
@@ -229,7 +232,7 @@ CPAN-Module wird [Carton] verwendet.
     \-- .travis.yml          Konfigurationsdatei für CI-Tests auf travis-ci.org
 
 
-### Modul-Übersicht
+## Modul-Übersicht
 
 GBV::App::Libsites
   : Webanwendung, wird von `app.psgi` aufgerufen.
@@ -242,7 +245,7 @@ Catmandu::Importer::Libsites
 
         ./catmandu convert libsites to YAML < sites.txt
 
-## Voraussetzungen
+# Voraussetzungen
 
 Zur Weiterentwicklung der Webanwendung werden benötigt:
 
@@ -262,7 +265,7 @@ Alle verwendeten CPAN-Module sind in der Datei `cpanfile` (bzw.
 `cpanfile.snapshot`) aufgelistet und lassen sich mit `carton install` (bzw.
 `carton install --deployment`) ins Verzeichnis `local/` installieren.
 
-### Unit-Tests
+## Unit-Tests
 
     make tests
 

@@ -1,20 +1,20 @@
 # basic frameworks
-requires 'Plack', '>= 1.0';
-requires 'Moo', '>= 1.0';
-requires 'Catmandu', '>= 0.7';
+requires 'Plack', '1.0';
+requires 'Moo', '1.0';
+requires 'Catmandu', '0.7';
 
 # Plack middleware and applications modules
-requires 'Plack::Middleware::Log::Contextual', '>= 0.01';
-requires 'Plack::Middleware::Rewrite', '0';
-requires 'Plack::Middleware::Debug', '0';
-requires 'Plack::Middleware::Negotiate', '>= 0.06';
-requires 'Plack::Middleware::TemplateToolkit', '>= 0.26';
-requires 'Plack::App::Directory::Template', '>= 0.26';
-requires 'Plack::App::RDF::Files', '0';
+requires 'Plack::Middleware::Log::Contextual', '0.01';
+requires 'Plack::Middleware::Rewrite', '1.0';
+requires 'Plack::Middleware::Debug', '0.16';
+requires 'Plack::Middleware::Negotiate', '0.06';
+requires 'Plack::Middleware::TemplateToolkit', '0.26';
+requires 'Plack::App::Directory::Template', '0.26';
+requires 'Plack::App::RDF::Files', '0.02';
 
 # Catmandu modules
 requires 'Catmandu::RDF', '0.03';
-requires 'Catmandu::PICA', '>= 0.01';
+requires 'Catmandu::PICA', '0.01';
 
 requires 'CHI', '0';
 requires 'Data::Beacon', '0';
