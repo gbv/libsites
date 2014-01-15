@@ -1,6 +1,7 @@
 package GBV::App::Libsites;
 
 use v5.14.2;
+use experimental qw(smartmatch);
 
 use parent 'Plack::Component';
 use Plack::Util::Accessor qw(root config app isil);
