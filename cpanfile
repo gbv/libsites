@@ -22,7 +22,7 @@ requires 'Data::Beacon', '0';
 requires 'File::Slurp', '0';
 requires 'JSON', '0';
 requires 'LWP::Simple', '0';
-requires 'PICA::Record', '0';
+requires 'PICA::Record', '>= 0.585';
 
 requires 'RDF::Dumper', '0';
 requires 'RDF::Flow', '0';
@@ -30,7 +30,7 @@ requires 'RDF::Lazy', '0';
 requires 'RDF::NS', '0';
 requires 'RDF::Trine', '0';
 requires 'Try::Tiny', '0';
-requires 'Turtle::Writer', '0';
+requires 'Turtle::Writer', '0.004';
 requires 'URI', '0';
 requires 'URI::Escape', '0';
 requires 'experimental';
