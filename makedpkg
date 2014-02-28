@@ -37,7 +37,7 @@ foreach my $template (<dpkg/*>) {
     say $filename if $VERBOSE;
 }
 
-foreach (@{ $conf->{before_build} || [ ] }) {
+foreach (@{ $conf->{build}->{before} || [ ] }) {
     `$_`;
     die "failed to run $_\n" if $?;
 }
