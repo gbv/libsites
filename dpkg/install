@@ -3,4 +3,4 @@ cpanfile            srv/{$package_name}
 cpanfile.snapshot   srv/{$package_name}
 lib/*               srv/{$package_name}/lib
 local/*             srv/{$package_name}/local
-public/*            srv/{$package_name}/public
+root/*              srv/{$package_name}/root

@@ -9,7 +9,7 @@ about:
 package:
     name            : libsites 
     description     : "VZG-Standortverwaltung"
-    depends         : "perl (>= 5.14), libxml2, libssl"
+    depends         : "perl (>= 5.14)"
     binary_depends  :
     section         : gbv
     priority        : extra
@@ -21,6 +21,8 @@ build:
         - libxml2-dev
         - libssl-dev
         - libexpat-dev
+        - devscripts
+        - dh-make
     before:
         - cpanm -L local Carton
         - perl -Ilocal/lib/perl5 local/bin/carton install
