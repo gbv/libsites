@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 #ABSTRACT: Holt RDF-Daten zu Katalogen von http://uri.gbv.de/database/
 use v5.14;
 

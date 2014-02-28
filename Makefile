@@ -52,13 +52,14 @@ ISILS	        = $(LIBSITES_CONFIG)/isil
 PICA    = $(shell find $(ISILS) -name '*.pica')
 TXT     = $(shell find $(ISILS) -name '*.txt')
 PICATTL = $(shell find $(ISILS) -name '*.pica' | sed s/pica/ttl/)
-TXTTTL  = $(shell find $(ISILS) -name '*.txt' | sed s/txt/ttl/)
 
 info:
 	@find $(ISILS)/* -mindepth 1 -printf '%f\n' | sort | uniq -c
 	@find $(ISILS)/* -type d -empty
 
-sites: $(TXTTTL)
+.pica.ttl:
+	@echo $< to $@
+	@./bin/zdb2ttl.pl $< > $@
 
 zdbttl: $(PICATTL)
 
@@ -73,18 +74,13 @@ lobid:
 opacs:
 		@ls $(ISILS) | xargs ./bin/getopac.pl
 
-update: isil-dir zdb lobid opacs sites
+update: dirs zdb lobid opacs sites
 	
-.pica.ttl:
-	@echo $< to $@
-	@./bin/zdb2ttl.pl $< > $@
-
-.txt.ttl:
-	@echo $< to $@
-	@./bin/txt2ttl.pl $< > $@
-
-isil-dir:
+dirs:
 	@cd $(LIBSITES_CONFIG) && make dirs
+
+sites:
+	@cd $(LIBSITES_CONFIG) && make sites
 
 clean-isil:
 	@cd $(LIBSITES_CONFIG) && make clean

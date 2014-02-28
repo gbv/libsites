@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 #ABSTRACT: Konvertiert ISIL-Verzeichnis in PICA+ nach RDF/Turtle
 use v5.14;
 use autodie;

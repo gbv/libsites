@@ -13,6 +13,9 @@ requires 'Plack::App::Directory::Template', '0.26';
 requires 'Plack::App::RDF::Files', '0.02';
 requires 'Plack::App::GitHub::WebHook', '0.4';
 
+# Logging
+requires 'Log::Contextual';
+
 # Catmandu modules
 requires 'Catmandu::RDF', '0.03';
 requires 'Catmandu::PICA', '0.01';
@@ -34,3 +37,5 @@ requires 'Turtle::Writer', '0.004';
 requires 'URI', '0';
 requires 'URI::Escape', '0';
 requires 'experimental';
+
+requires 'Starman';

@@ -2,7 +2,7 @@ package GBV::App::Logger;
 #ABSTRACT: Import logging methods from Log::Contextual with WarnLogger default
 
 use v5.14.2;
-use base 'Log::Contextual';
+use parent 'Log::Contextual';
 use Log::Contextual::WarnLogger;
 
 sub arg_default_logger {

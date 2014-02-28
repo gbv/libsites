@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 #ABSTRACT: Holt RDF-Daten von Lobid.org
 use v5.14;
 
