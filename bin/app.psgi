@@ -1,11 +1,14 @@
 use v5.14.2;
 
-use File::Spec::Functions qw(catdir rel2abs);
-use File::Basename qw(dirname);
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+
 use Plack::Builder;
 use GBV::App::Libsites;
 
 my $devel = ($ENV{PLACK_ENV}||'') eq 'development'; 
+my $config = "$FindBin::Bin/../libsites-config";
+$config = '/etc/libsites' unless -e $config;
 
 builder {
     enable_if { $devel } 'Debug';
@@ -14,7 +17,7 @@ builder {
     enable_if { $devel } 'Log::Contextual', level => 'trace';
 
     GBV::App::Libsites->new(
-        root   => rel2abs(catdir(dirname($0),'root')),
-        config => rel2abs(catdir(dirname($0),'libsites-config')),
+        root   => 'root',
+        config => $config
     );
 };

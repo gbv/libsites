@@ -4,7 +4,7 @@ use Plack::Test;
 use Plack::Util;
 use HTTP::Request::Common;
 
-my $app = Plack::Util::load_psgi('./app.psgi');
+my $app = Plack::Util::load_psgi('bin/app.psgi');
 
 test_psgi $app, sub {
     my $cb = shift;

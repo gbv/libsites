@@ -1,4 +1,4 @@
-APP=app.psgi
+APP=bin/app.psgi
 
 deps:
 	@if [ "$$PERLBREW_PERL" ]; then\
@@ -9,6 +9,7 @@ deps:
 	fi
 
 build: noperlbrew deps
+	@echo "Make sure to have no perlbrew-installed libs in local/!"
 	@./makedpkg
 
 test:
@@ -45,6 +46,7 @@ doc:
 ########################################################################
 
 LIBSITES_CONFIG = ./libsites-config
+
 ISILS	        = $(LIBSITES_CONFIG)/isil
 
 .SUFFIXES: .txt .pica .nt .ttl
@@ -52,10 +54,6 @@ ISILS	        = $(LIBSITES_CONFIG)/isil
 PICA    = $(shell find $(ISILS) -name '*.pica')
 TXT     = $(shell find $(ISILS) -name '*.txt')
 PICATTL = $(shell find $(ISILS) -name '*.pica' | sed s/pica/ttl/)
-
-info:
-	@find $(ISILS)/* -mindepth 1 -printf '%f\n' | sort | uniq -c
-	@find $(ISILS)/* -type d -empty
 
 .pica.ttl:
 	@echo $< to $@
@@ -75,12 +73,9 @@ opacs:
 		@ls $(ISILS) | xargs ./bin/getopac.pl
 
 update: dirs zdb lobid opacs sites
-	
-dirs:
-	@cd $(LIBSITES_CONFIG) && make dirs
 
 sites:
-	@cd $(LIBSITES_CONFIG) && make sites
+	@make -C $(LIBSITES_CONFIG) sites
 
 clean-isil:
 	@cd $(LIBSITES_CONFIG) && make clean

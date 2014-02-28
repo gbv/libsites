@@ -3,3 +3,4 @@ local/
 doc/*.pdf
 doc/*.html
 doc/*.tmp
+debuild
