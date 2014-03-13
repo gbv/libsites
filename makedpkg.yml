@@ -1,22 +1,20 @@
 ---
-about:
-    author          : Jakob Voss <voss@gbv.de>
-    architecture    : any
-    version         : "`git tag | sort -r | awk '/^v[0-9]+\.[0-9]+$/ {print substr($1,2)}' | head -1`"
-    changes         : "`git log -n1 --pretty=format:\"  * %s\"`"
-    timestamp       : "`git log -n1 --format=\"%ad\" --date=rfc`"
+author          : Jakob Voss <voss@gbv.de>
+architecture    : any
+version         : '`git tag | sort -r | awk "/^v[0-9]+\.[0-9]+\$/ {print substr(\$1,2)}" | head -1`'
+changes         : '`git log -n1 --pretty=format:"  * %s"`'
+timestamp       : '`git log -n1 --format="%ad" --date=rfc`'
 
-package:
-    name            : libsites 
-    description     : "VZG-Standortverwaltung"
-    depends         : "perl (>= 5.14)"
-    binary_depends  :
-    section         : gbv
-    priority        : extra
-    port            : 6013
+name            : libsites 
+description     : "VZG-Standortverwaltung"
+build_depends   : "perl (>= 5.14)"
+binary_depends  :
+section         : gbv
+priority        : extra
+port            : 6013
 
 build:
-    depends: 
+    depends:
         - cpanminus
         - libxml2-dev
         - libssl-dev
@@ -27,13 +25,14 @@ build:
         - cpanm -L local Carton
         - perl -Ilocal/lib/perl5 local/bin/carton install
         - perl -Ilocal/lib/perl5 local/bin/carton exec -- prove -Ilib t
+    files:
+        to: srv/libsites
+        from:
+            - bin
+            - cpanfile
+            - cpanfile.snapshot
+            - lib
+            - local
+            - root
 
-source:
-    - bin
-    - cpanfile
-    - cpanfile.snapshot
-    - lib
-    - local
-    - root
-
-debuild: -uc -us
+    command: "debuild -uc -us"

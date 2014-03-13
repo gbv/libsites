@@ -2,7 +2,7 @@
 
 set -e
 
-PACKAGE={$package_name}
+PACKAGE={$name}
 
 case "$1" in
     configure)

@@ -2,6 +2,7 @@
 requires 'Plack', '1.0';
 requires 'Moo', '1.0';
 requires 'Catmandu', '0.7';
+requires 'Carton';
 
 # Plack middleware and applications modules
 requires 'Plack::Middleware::Log::Contextual', '0.01';

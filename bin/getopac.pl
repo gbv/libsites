@@ -3,7 +3,7 @@
 use v5.14;
 
 use FindBin;
-use lib "$FindBin::Bin/lib";
+use lib "./lib";
 use GBV::App::GetISIL;
 
 getisil 'opac.ttl' => sub {

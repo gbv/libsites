@@ -4,3 +4,4 @@ doc/*.pdf
 doc/*.html
 doc/*.tmp
 debuild
+libsites_*
