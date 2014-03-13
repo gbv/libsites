@@ -1,5 +1,5 @@
 libsites-config/
-local/
+perl5/
 doc/*.pdf
 doc/*.html
 doc/*.tmp

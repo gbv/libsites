@@ -22,9 +22,9 @@ build:
         - devscripts
         - dh-make
     before:
-        - cpanm -L local Carton
-        - perl -Ilocal/lib/perl5 local/bin/carton install
-        - perl -Ilocal/lib/perl5 local/bin/carton exec -- prove -Ilib t
+        - cpanm -L perl5 Carton
+        - perl -Iperl5/lib/perl5 perl5/bin/carton install
+        - perl -Iperl5/lib/perl5 perl5/bin/carton exec -- prove -Ilib t
     files:
         to: srv/libsites
         from:
@@ -32,7 +32,8 @@ build:
             - cpanfile
             - cpanfile.snapshot
             - lib
-            - local
+            - perl5
             - root
+            - .bashrc
 
     command: "debuild -uc -us"

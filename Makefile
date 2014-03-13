@@ -10,7 +10,7 @@ deps:
 
 build: noperlbrew deps
 	@echo "Make sure to have no perlbrew-installed libs in local/!"
-	@./makedpkg
+	@makedpkg
 
 test:
 	@if [ "$$PERLBREW_PERL" ]; then\
