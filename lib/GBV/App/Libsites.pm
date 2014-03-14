@@ -109,12 +109,13 @@ sub prepare_app {
             parameter => 'format',
             extension => 'strip',
             formats => {
-                ttl  => { type => 'text/turtle' },
-                nt   => { type => 'text/plain' },
-                n3   => { type => 'text/n3' },
-                json => { type => 'application/rdf+json' },
-                html => { type => 'text/html' },
-                _    => { charset => 'utf-8', }
+                ttl    => { type => 'text/turtle' },
+                rdfxml => { type => 'application/rdf+xml' },
+                nt     => { type => 'text/plain' },
+                n3     => { type => 'text/n3' },
+                json   => { type => 'application/rdf+json' },
+                html   => { type => 'text/html' },
+                _      => { charset => 'utf-8', }
             };
 
         enable sub {
@@ -156,6 +157,11 @@ sub prepare_app {
                     } else {
                         $env->{'tt.vars'}->{uri} = $env->{'rdf.uri'};
                     }
+
+                    my $path = $env->{PATH_INFO} // '/';
+                    $path =~ s|^/[^/]*||;
+                    $path =~ s|/[^/]*|../|g;
+                    $env->{'tt.vars'}->{base} = $path;
 
                     my $res2 = $html_app->call( $env );
 
