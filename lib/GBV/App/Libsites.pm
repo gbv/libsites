@@ -40,7 +40,7 @@ sub rdfsources {
         given ($s) {
             when('sites') {
                 $h{title} = 'GBV Standortverzeichnis';
-                $h{href} = "https://github.com/gbv/libsites/blob/master/isil/$isil/sites.txt";
+                $h{href} = "https://github.com/gbv/libsites-config/blob/master/isil/$isil/sites.txt";
             };
             when('opac') {
                 $h{'title'} = 'GBV Datenbankverzeichnis';
@@ -161,6 +161,7 @@ sub prepare_app {
                     my $path = $env->{PATH_INFO} // '/';
                     $path =~ s|^/[^/]*||;
                     $path =~ s|/[^/]*|../|g;
+                    $path = "./" if $path =~ /^\.?$/;
                     $env->{'tt.vars'}->{base} = $path;
 
                     my $res2 = $html_app->call( $env );
