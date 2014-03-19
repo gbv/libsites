@@ -8,7 +8,7 @@ case "$1" in
     purge)
 
         # Remove init script links
-        update-rc.d $PACKAGE remove
+        service $PACKAGE remove
 
         # Remove user
         userdel $PACKAGE || true
