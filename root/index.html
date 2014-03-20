@@ -1,23 +1,26 @@
+﻿[% USE date %]
 <p>
-Auf dieser Seite k&ouml;nnen allgemeine Informationen zu Bibliotheken und verwandten Einrichtungen
-nachgeschlagen werden. Die Daten stammen zum gr&ouml;&szlig;ten Teil aus dem Projekt 
-<a href="http://lobid.org">lobid.org</a>
-des Hochschulbibliothekszentrums des Landes Nordrhein-Westfalen (hbz), welches wiederum aus
-Informationen des <a href="http://dispatch.opac.d-nb.de/DB=1.1/DB=1.2/">Deutschen ISIL-Verzeichnis</a>
-und anderer ISIL-Agenturen gespeist wird.
+  Der jeweils aktuelle Stand und alle Änderungen stehen unter
+  <a href="https://github.com/gbv/libsites-config">https://github.com/gbv/libsites-config</a>.
 </p>
-<p>
-Die Informationen werden gleichzeitig als Linked Data in RDF angeboten, wobei sich die URI einer
-Organisation aus deren ISIL ergibt:
-
-<pre>
-http://uri.gbv.de/organization/isil/{ISIL}
-</pre>
-
-Mit den URL-Parameter <code>format</code> k&ouml;nnen verschiedene RDF-Serialisierungen wie
-RDF/XML, RDF/Turtle und RDF/JSON (auch als JSONP) ausgew&auml;hlt werden.
-</p>
-<p>
-Weitere Informationen zu Bibliotheken finden sie u.A. im
-<a href="http://www.bibliotheksportal.de/bibliotheken/bibliotheken-in-deutschland.html">Bibliotheksportal</a>
-und in der <a href="http://www.bibliotheksstatistik.de/">Deutschen Bibliotheksstatistik</a>.
+<h2>$title</h2>
+<table>
+  <thead>
+    <tr>
+          <th class='name'>Name</th>
+          <th class='size'>Size</th>
+          <th class='type'>Type</th>
+          <th class='mtime'>Last Modified</th>
+    </tr>
+  </thead>
+  <tbody>
+    [% FOR file IN files %]
+    <tr>
+      <td class='name'><a href='[% file.url | html %]'>[% file.name | html %]</a></td>
+      <td class='size'>[% file.stat.size %]</td>
+      <td class='type'>[% file.mime_type %]</td>
+      <td class='mtime'>[% date.format( file.stat.mtime  ) %]</td>
+    </tr>
+    [% END %]
+  </tbody>
+</table>

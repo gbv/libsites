@@ -11,6 +11,7 @@ test_psgi $app, sub {
     my $res = $cb->(GET '/');
     is $res->code, 200, 'HTTP response OK at /';
 
+    # TODO: config anlegen
     # $res = $cb->(GET "/isil/DE-1a");
     # is $res->code, 200;
 };

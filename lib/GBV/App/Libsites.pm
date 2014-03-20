@@ -16,6 +16,7 @@ use RDF::Trine::Parser;
 use Time::Piece;
 use List::Util qw(max);
 use RDF::NS;
+use RDF::Lazy;
 use constant NS => RDF::NS->new();
 
 sub prepare_app {
@@ -24,12 +25,13 @@ sub prepare_app {
     my $tt = Plack::Middleware::TemplateToolkit->new( 
         INCLUDE_PATH => $self->root,
         INTERPOLATE  => 1, 
+        VARIABLES    => { base => './' },
         vars         => { formats => [qw(ttl rdfxml nt json)] },
-        request_vars => [qw(base)],
         404          => '404.html', 
         500          => '500.html',
         PRE_PROCESS  => 'header.html',
         POST_PROCESS => 'footer.html',
+        dir_index    => 'about.html',
     );
     $tt->prepare_app;
 
@@ -52,7 +54,12 @@ sub prepare_app {
             };
         builder {
             mount '/source' => Plack::App::Directory::Template->new(
-                    root => $self->config . '/isil'
+                    root => $self->config . '/isil',
+                    VARIABLES    => { base => '../../' }, # TODO: dynamic
+                    templates    => $self->root,
+                    INTERPOLATE  => 1, 
+                    PRE_PROCESS  => 'header.html',
+                    POST_PROCESS => 'footer.html',
                 );
             mount '/isil' => builder {
                 enable_if { $_[0]->{'negotiate.format'} eq 'html' } sub {
