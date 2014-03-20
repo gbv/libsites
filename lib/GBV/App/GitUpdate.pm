@@ -41,17 +41,19 @@ sub init_repository {
     }
 }
 
+# TODO: log all this actions!
+
 sub pull {
     my ($self) = @_;
 
     $self->init_repository unless ($self->repository);
     return unless $self->repository;
 
-    $self->repository->run('pull origin master');
+    $self->repository->run('pull','origin','master');
 
-    chdir $self->work_tree;
-
-    system('make','sites'); # TODO: update
+    # TODO: this does not work (???)
+#    chdir $self->work_tree;
+#    system('make','sites'); # TODO: update
 }
 
 sub call {
