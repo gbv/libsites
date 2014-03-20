@@ -35,8 +35,8 @@ case "$1" in
             chown -R $PACKAGE:adm /etc/$PACKAGE
         fi
 
-        # Start with upstart
-        start $PACKAGE
+        # (re)start with upstart
+        service $PACKAGE restart
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
