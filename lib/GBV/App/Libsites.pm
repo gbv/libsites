@@ -42,7 +42,7 @@ sub prepare_app {
         enable 'JSONP';
         enable 'Negotiate',
             parameter => 'format',
-            extension => 'strip',
+            extension => 0,
             formats => {
                 ttl    => { type => 'text/turtle' },
                 rdfxml => { type => 'application/rdf+xml' },
