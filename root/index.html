@@ -16,7 +16,7 @@
   <tbody>
     [% FOR file IN files %]
     <tr>
-      <td class='name'><a href='./[% file.url | html %]'>[% file.name | html %]</a></td>
+      <td class='name'><a href='[% file.name | html %]'>[% file.name | html %]</a></td>
       <td class='size'>[% file.stat.size %]</td>
       <td class='type'>[% file.mime_type %]</td>
       <td class='mtime'>[% date.format( file.stat.mtime  ) %]</td>
