@@ -1,30 +1,27 @@
 APP=bin/app.psgi
+LIB=perl5/lib/perl5
+CARTON=perl5/bin/carton
 
 deps:
 	@if [ "$$PERLBREW_PERL" ]; then\
 		cpanm --installdeps . ;\
 	else \
-		[ -f local/bin/carton ] || cpanm -L local Carton ;\
-		perl -Ilocal/lib/perl5 local/bin/carton install ;\
+		[ -f $(CARTON) ] || cpanm -L perl5 Carton ;\
+		perl -I$(LIB) $(CARTON) install ;\
 	fi
 
 build: noperlbrew deps
-	@echo "Make sure to have no perlbrew-installed libs in local/!"
+	@echo "Make sure to have no perlbrew-installed libs in perl5/!"
 	@makedpkg
 
 test:
-	@if [ "$$PERLBREW_PERL" ]; then\
-		prove -Ilib t ;\
-	else\
-		perl -Ilocal/lib/perl5 local/bin/carton exec -- prove -Ilib t ;\
-	fi
+	@perl -I$(LIB) $(CARTON) exec -- prove -Ilib t
+
+debug:
+	@perl -I$(LIB) $(CARTON) exec -- perl5/bin/plackup -R lib -r $(APP)
 
 start:
-	@if [ "$$PERLBREW_PERL" ]; then\
-		plackup -Ilib $(APP) ;\
-	else \
-		perl -Ilocal/lib/perl5 local/bin/carton exec -- local/bin/starman $(APP) ;\
-	fi
+	@perl -I$(LIB) $(CARTON) exec -- perl5/bin/starman $(APP)
 
 noperlbrew:
 	@if [ "$$PERLBREW_PERL" ]; then\
@@ -36,7 +33,7 @@ clean:
 	@rm -rf debuild cache
 
 purge: clean
-	@rm -rf local
+	@rm -rf perl5
 
 .PHONY: doc deps build test start noperlbrew update
 

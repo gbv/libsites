@@ -17,6 +17,12 @@ case "$1" in
         # Make sure this user owns the directory
         chown -R $PACKAGE:adm /srv/$PACKAGE
 
+        # Symlink local/ to perl5/
+        if [ ! -e /srv/$PACKAGE/local ]; then
+            cd /srv/$PACKAGE
+            ln -s perl5 local
+        fi
+
         # Create log directory
         if [ ! -e /var/log/$PACKAGE ]; then
             mkdir /var/log/$PACKAGE

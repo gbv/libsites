@@ -14,8 +14,11 @@ requires 'Plack::App::Directory::Template', '0.26';
 requires 'Plack::App::RDF::Files', '0.02';
 requires 'Plack::App::GitHub::WebHook', '0.4';
 
+# Git
+requires 'Git::Repository';
+
 # Logging
-requires 'Log::Contextual';
+requires 'Log::Contextual', '0.006000';
 
 # Catmandu modules
 requires 'Catmandu::RDF', '0.03';

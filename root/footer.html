@@ -17,11 +17,11 @@
     </div>
    [% END %]
 
-   <p><a href="http://www.gbv.de/wikis/cls/Konfiguration_der_GBV-Standortverwaltung">Hilfe zur Konifguration</a></p>
+   <p><a href="http://www.gbv.de/wikis/cls/Konfiguration_der_GBV-Standortverwaltung">Hilfe zur Konfiguration</a></p>
 
    [% IF sources.size %]
     <p>
-      Quellen: <ul>
+      <a href="${base}source/${sourcedir}">Quellen</a>: <ul>
       [% FOR s IN sources %]
         [% IF s.title OR s.size %]
         <li>

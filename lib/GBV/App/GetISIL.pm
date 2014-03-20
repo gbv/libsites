@@ -1,7 +1,5 @@
 package GBV::App::GetISIL;
-use v5.14;
-
-use GBV::App::Logger;
+use v5.14.2;
 
 use base 'Exporter';
 our @EXPORT = qw(getisil getlod serializettl);
