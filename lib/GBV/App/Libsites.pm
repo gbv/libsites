@@ -117,6 +117,7 @@ sub add_env_sources {
     my $rdffiles = $env->{'rdf.files'};
 
     my $isil = ($uri =~ /http:\/\/uri.gbv.de\/organization\/isil\/(.+)/ ? $1 : '');
+    $isil =~ s/@.*//;
 
     my @sources; 
     foreach my $file ( keys %$rdffiles ) {

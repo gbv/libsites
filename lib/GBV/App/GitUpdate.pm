@@ -20,7 +20,19 @@ sub prepare_app {
         )->to_app
     );
 
+    if (-d '/var/log/libsites') {
+        open $self->{logfile}, '>>', '/var/log/libsites/update.log';
+    }
+
     $self->init_repository;
+}
+
+sub log {
+    my ($self, $msg) = @_;
+
+    if ($self->{logfile}) {
+        print {$self->{logfile}} $msg;
+    }
 }
 
 sub init_repository {
@@ -28,6 +40,7 @@ sub init_repository {
 
     unless ( -d $self->work_tree and -d $self->work_tree . '/.git') {
         if ( $self->origin ) {
+            $self->log("cloning ".$self->origin);
             Git::Repository->run( 'clone', $self->origin, $self->work_tree );
         }
     }
@@ -46,14 +59,20 @@ sub init_repository {
 sub pull {
     my ($self) = @_;
 
-    $self->init_repository unless ($self->repository);
+    $self->init_repository unless $self->repository;
     return unless $self->repository;
 
+    $self->log("git pull in ".$self->work_tree);
     $self->repository->run('pull','origin','master');
 
     # TODO: this does not work (???)
-#    chdir $self->work_tree;
-#    system('make','sites'); # TODO: update
+    my $log = "";
+    chdir $self->work_tree;
+    open P, 'eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib) && make deps && make sites |';
+    while (<P>) {
+        $self->log($_);
+    }
+    close P;
 }
 
 sub call {
