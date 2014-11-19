@@ -1,4 +1,4 @@
-TITLE   = VZG-Standortverwaltung
+TITLE   = VZG-Standortverzeichnis
 AUTHOR  = Jakob Voß (VZG)
 NAME    = libsites
 

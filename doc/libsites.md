@@ -1,6 +1,6 @@
 # Übersicht
  
-Die **VZG-Standortverwaltung** ("libsites") ist eine Webanwendung zur
+Das **VZG-Standortverzeichnis** ("libsites") ist eine Webanwendung zur
 Aggregation und Präsentation von Informationen über Bibliotheken, Museen und
 verwandte Einrichtungen, soweit diese für die Anwendungen der VZG relevant
 sind. Die zusammengeführen Informationen wie Namen, Adressen, Öffnungszeiten,
@@ -95,8 +95,7 @@ Für jede Bibliothek sind folgende Dateien vorgesehen:
 
 * sites.txt - Standortdefinitionen, ggf. mit Name, Adresse, URL, Geokoordinate etc.
   * *sites.ttl* - RDF/Turtle erzeugt aus sites.txt mit `app/txt2ttl.pl`
-* zdb.pica - PICA-Normsatz aus dem ISIL-Verzeichnis, geholt mit `app/getzdb.pl` 
-  * *zdb.ttl* - RDF/Turtle erzeugt aus zdb.pica mit `app/zdb2ttl.pl`
+* zdb.pica - PICA-Normsatz aus dem ISIL-Verzeichnis
 * zdbrdf.nt - RDF-Export aus dem ISIL-Verzeichnis
 * lobid.ttl - RDF/Turtle von Lobid.org
 * opac.ttl - Informationen zum Katalog der Bibliothek, geholt von

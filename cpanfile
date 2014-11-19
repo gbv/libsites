@@ -29,7 +29,6 @@ requires 'Data::Beacon', '0';
 requires 'File::Slurp', '0';
 requires 'JSON', '0';
 requires 'LWP::Simple', '0';
-requires 'PICA::Record', '>= 0.585';
 
 requires 'RDF::Dumper', '0';
 requires 'RDF::Flow', '0';

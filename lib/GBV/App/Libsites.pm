@@ -39,6 +39,9 @@ sub prepare_app {
         enable 'Static', 
             root => $self->root, 
             path => qr{\.(css|png|gif|js|ico)$};
+        enable 'Static',
+            root => $self->config,
+            path => qr{libsites\.ttl$};
         enable 'JSONP';
         enable 'Negotiate',
             parameter => 'format',
