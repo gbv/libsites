@@ -66,22 +66,22 @@ sub prepare_app {
                 );
             mount '/isil' => builder {
                 enable_if { $_[0]->{'negotiate.format'} eq 'html' } sub {
-                    # TODO: directly load via RDF::Files
                     my ($app) = @_;
                     sub {
                         my ($env) = @_;
+                        $env->{'psgi.streaming'} = 1;
                         $env->{'negotiate.format'} = 'nt';
                         my $res = $app->($env);
+
                         Plack::Util::response_cb( $res, sub {
                             my $res = shift;
                             my $uri = $env->{'rdf.uri'};
-                            my $rdf = RDF::Trine::Model->new;
-                            if ($res->[0] eq '200') {
-                                my $parser = RDF::Trine::Parser->new('ntriples');
-                                my $data = join '', @{$res->[2]};
-                                $parser->parse_into_model( $uri, $data, $rdf );
+                            my $iter = $env->{'rdf.iterator'};
+                            my $model = RDF::Trine::Model->new;
+                            if ($res->[0] eq '200' and $iter) {
+                                $model->add_iterator($iter);
                             }
-                            my $res2 = $self->call_html($env,$rdf);
+                            my $res2 = $self->call_html($env,$model);
                             $res->[$_] = $res2->[$_] for (0..2);
                         }); 
                     }
