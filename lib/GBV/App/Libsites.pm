@@ -22,6 +22,11 @@ use constant NS => RDF::NS->new();
 sub prepare_app {
     my ($self) = @_;
 
+    for ($ENV{LIBSITES_CONFIG}, './libsites-config', '/etc/libsites') {
+        $self->config($_);
+        last if -d $_;
+    }
+
     my $tt = Plack::Middleware::TemplateToolkit->new( 
         INCLUDE_PATH => $self->root,
         INTERPOLATE  => 1, 

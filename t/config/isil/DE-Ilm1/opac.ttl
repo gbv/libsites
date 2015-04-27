@@ -1,0 +1,8 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix dct: <http://purl.org/dc/terms/> .
+
+<http://uri.gbv.de/database/opac-de-ilm1>
+    dc:subject <http://uri.gbv.de/database/opac> ;
+	dct:title "Katalog der Universit\u00E4tsbibliothek Ilmenau" ;
+	<http://purl.org/ontology/gbv/dbkey> "opac-de-ilm1" .
+<http://uri.gbv.de/organization/isil/DE-Ilm1> <http://purl.org/ontology/gbv/opac> <http://uri.gbv.de/database/opac-de-ilm1> .

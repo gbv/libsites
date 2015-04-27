@@ -2,7 +2,6 @@ use v5.14.2;
 use FindBin;
 
 use constant ROOT   => "$FindBin::Bin/../";
-use constant CONFIG => -e ROOT.'libsites-config' ? ROOT.'libsites-config' : '/etc/libsites';
 use constant DEVEL  => ($ENV{PLACK_ENV}||'') eq 'development'; 
 
 use lib ROOT."lib";
@@ -11,6 +10,8 @@ use Plack::Builder;
 use GBV::App::GitUpdate;
 use GBV::App::Libsites;
 use Plack::App::GitHub::WebHook;
+
+my $app = GBV::App::Libsites->new( root   => 'root' );
 
 builder {
     enable_if { DEVEL } 'Debug';
@@ -21,11 +22,8 @@ builder {
     builder {
         mount '/update' => GBV::App::GitUpdate->new(
             access    => [ allow => 'all'], # for testing
-            work_tree => CONFIG
+            work_tree => $app->config,
         )->to_app;
-        mount '/' => GBV::App::Libsites->new(
-            root   => 'root',
-            config => CONFIG
-        )->to_app;
+        mount '/' => $app->to_app
     }
 };
