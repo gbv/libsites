@@ -11,7 +11,7 @@ requires 'Plack::Middleware::Debug', '0.16';
 requires 'Plack::Middleware::Negotiate', '0.06';
 requires 'Plack::Middleware::TemplateToolkit', '0.26';
 requires 'Plack::App::Directory::Template', '0.26';
-requires 'Plack::App::RDF::Files', '0.11';
+requires 'Plack::App::RDF::Files', '0.12';
 requires 'Plack::App::GitHub::WebHook', '0.4';
 
 # Git
