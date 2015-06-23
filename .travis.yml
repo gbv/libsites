@@ -1,28 +1,25 @@
-language: perl
-perl:
-    - "5.19"
-    - "5.18"
-    - "5.16"
-    - "5.14"
-
-matrix:
-  allow_failures:
-    perl: "5.19"
-
+language: bash
+sudo: required
 before_install:
-    - git config user.name 'Travis-CI'
-    - git config user.email 'travis@nowhere.dne'
-
+  - sudo make dependencies
 install:
-    - cpanm --quiet --notest --skip-satisfied Carton
-    - make deps
-
+  - sudo chown -R travis:travis /home/travis/.cpanm
+  - make local-libs
 script:
-    - make test
-
-# TODO: coverage
-#after_success:
-#    - cpanm --quiet --notest --skip-satisfied Dist::Zilla::App::Command::cover Devel::Cover::Report::Coveralls
-#    - dzil cover -test && dzil cover -report coveralls
-
-env: RELEASE_TESTING=1 AUTOMATED_TESTING=1 AUTHOR_TESTING=1 PLACK_ENV=test
+  - export PACKAGE=`perl -ne 'print $1 if /^Package:\s+(.+)/;' < debian/control`
+  - export TEST_URL=app.psgi
+  - prove -l -Ilocal/lib/perl5 -v
+  - make release-file
+  - sudo dpkg -i ${PACKAGE}_*.deb
+  - sudo service ${PACKAGE} status
+  - sudo service ${PACKAGE} restart
+  - export TEST_URL=deployed
+  - prove -l -v
+cache: apt
+after_failure:
+  - tail -200 /var/log/${PACKAGE}/error.log
+  - tail -200 /var/log/${PACKAGE}/access.log
+  - curl -i http://localhost:6013/ 
+before_deploy:
+  - export RELEASE_PKG_FILE=$(ls *.deb)
+  - echo "deploying $RELEASE_PKG_FILE"

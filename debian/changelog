@@ -1,0 +1,5 @@
+libsites (0.1.5) unstable; urgency=medium
+
+  * migrated packaging to Debian
+
+ -- Jakob Voß <jakob.voss@gbv.de>  Thu, 23 Jun 2015 10:00:00 +0100

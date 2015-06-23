@@ -1,0 +1,6 @@
+app.psgi            srv/libsites
+lib/*               srv/libsites/lib
+local/*             srv/libsites/local
+bin/*               srv/libsites/bin
+public/*            srv/libsites/public
+README.md           usr/share/doc/libsites

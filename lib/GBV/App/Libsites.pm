@@ -4,7 +4,7 @@ use v5.14.2;
 use experimental qw(smartmatch);
 
 use parent 'Plack::Component';
-use Plack::Util::Accessor qw(root config isil app tt);
+use Plack::Util::Accessor qw(config isil app tt);
 use Plack::Builder;
 
 use Log::Contextual qw(:log :dlog);
@@ -28,7 +28,7 @@ sub prepare_app {
     }
 
     my $tt = Plack::Middleware::TemplateToolkit->new( 
-        INCLUDE_PATH => $self->root,
+        INCLUDE_PATH => 'public',
         INTERPOLATE  => 1, 
         VARIABLES    => { base => './' },
         vars         => { formats => [qw(ttl rdfxml nt json)] },
@@ -42,7 +42,7 @@ sub prepare_app {
 
     my $app = builder {
         enable 'Static', 
-            root => $self->root, 
+            root => 'public', 
             path => qr{\.(css|png|gif|js|ico)$};
         enable 'Static',
             root => $self->config,
@@ -64,7 +64,7 @@ sub prepare_app {
             mount '/source' => Plack::App::Directory::Template->new(
                     root => $self->config . '/isil',
                     VARIABLES    => { base => '../../' }, # TODO: dynamic
-                    templates    => $self->root,
+                    templates    => 'public',
                     INTERPOLATE  => 1, 
                     PRE_PROCESS  => 'header.html',
                     POST_PROCESS => 'footer.html',
@@ -95,6 +95,7 @@ sub prepare_app {
                     base_dir => $self->config . '/' . 'isil',
                     base_uri => 'http://uri.gbv.de/organization/isil/',
                     path_map => sub { $_ = shift; $_ =~ s/\@.+$//; $_ },
+                    normalize => 'NFC',
                 )->to_app;
             };
             mount '/' => $tt;

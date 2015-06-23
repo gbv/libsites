@@ -1,47 +1,46 @@
 #!/bin/sh
-
 set -e
 
-PACKAGE={$name}
+PACKAGE="$DPKG_MAINTSCRIPT_PACKAGE"
 
 case "$1" in
     configure)
 
-        # Create user if it doesn`t exist.
+        # Create group if not existing
+        getent group $PACKAGE || groupadd $PACKAGE
+
+        # Create user if not existing
         if ! id $PACKAGE > /dev/null 2>&1 ; then
             adduser --system --home /srv/$PACKAGE --no-create-home \
-                --ingroup nogroup --disabled-password --shell /bin/bash \
+                --ingroup $PACKAGE --disabled-password --shell /bin/bash \
                 $PACKAGE
-        fi
-
-        # Make sure this user owns the directory
-        chown -R $PACKAGE:adm /srv/$PACKAGE
-
-        # Symlink local/ to perl5/
-        if [ ! -e /srv/$PACKAGE/local ]; then
-            cd /srv/$PACKAGE
-            ln -s perl5 local
         fi
 
         # Create log directory
         if [ ! -e /var/log/$PACKAGE ]; then
             mkdir /var/log/$PACKAGE
-            chown -R $PACKAGE:adm /var/log/$PACKAGE
         fi
 
-        # Create etc directory
+        # Create config directory
         if [ ! -e /etc/$PACKAGE ]; then
             mkdir /etc/$PACKAGE
-            chown -R $PACKAGE:adm /etc/$PACKAGE
         fi
 
-        # (re)start with upstart
+        # Make sure user owns his directories
+        chown -R $PACKAGE:$PACKAGE /srv/$PACKAGE
+        chown -R $PACKAGE:$PACKAGE /var/log/$PACKAGE
+        chown -R $PACKAGE:$PACKAGE /etc/$PACKAGE
+
+        # Install web application as service
+        update-rc.d -f $PACKAGE defaults
+
+        # (re)start service
         service $PACKAGE restart
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
     ;;
- 
+
     *)
         echo "postinst called with unknown argument: $1" >&2
         exit 1

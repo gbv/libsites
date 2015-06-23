@@ -1,6 +1,0 @@
-#!/bin/sh
-set -e
-if [ -e "/etc/init/{name}.conf" ]; then
-    service libsites stop || exit $?
-fi
-

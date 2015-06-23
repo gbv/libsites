@@ -4,7 +4,6 @@
 
     * falls sich eine Datei geändert hat
             Parser
-
     * cronjob?
     * Makefile?
 

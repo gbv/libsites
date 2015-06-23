@@ -2,12 +2,13 @@ use strict;
 use Test::More;
 use Plack::Test;
 use Plack::Util;
+use Plack::Util::Load;
 use HTTP::Request::Common;
 use JSON;
 
 $ENV{LIBSITES_CONFIG} = 't/config';
 
-my $app = Plack::Util::load_psgi('bin/app.psgi');
+my $app = load_app( $ENV{TEST_URL} || 'app.psgi');
 
 test_psgi $app, sub {
     my $cb = shift;
@@ -15,7 +16,7 @@ test_psgi $app, sub {
     is $res->code, 200, 'HTTP response OK at /';
 
     $res = $cb->(GET "/isil/DE-Ilm1");
-    is $res->code, 404, 'not found';
+    is $res->code, 200, 'found DE-Ilm1';
 
     $res = $cb->(GET "/isil/DE-Ilm1?format=json");
     is $res->code, 200;
@@ -51,10 +52,6 @@ test_psgi $app, sub {
            }
          ],
          'http://xmlns.com/foaf/0.1/name' => [
-           {
-             'type' => 'literal',
-             'value' => "Universita\x{308}tsbibliothek Ilmenau"
-           },
            {
              'type' => 'literal',
              'value' => "Universit\x{e4}tsbibliothek Ilmenau"

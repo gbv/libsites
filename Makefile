@@ -1,42 +1,54 @@
-APP=bin/app.psgi
-LIB=perl5/lib/perl5
-CARTON=perl5/bin/carton
+MAINSRC:=lib/GBV/App/Libsites.pm
+CONTROL:=debian/control
 
-deps:
-	@if [ "$$PERLBREW_PERL" ]; then\
-		cpanm --installdeps . ;\
-	else \
-		[ -f $(CARTON) ] || cpanm -L perl5 Carton ;\
-		perl -I$(LIB) $(CARTON) install ;\
-	fi
+# parse debian control file and changelog
+C:=(
+J:=)
+PACKAGE:=$(shell perl -ne 'print $$1 if /^Package:\s+(.+)/;' < $(CONTROL))
+ARCH   :=$(shell perl -ne 'print $$1 if /^Architecture:\s+(.+)/' < $(CONTROL))
+DEPENDS:=$(shell perl -ne '\
+	next if /^\#/; $$p=(s/^Depends:\s*/ / or (/^ / and $$p));\
+	s/,|\n|\([^$J]+\)//mg; print if $$p' < $(CONTROL))
+VERSION:=$(shell perl -ne '/^.+\s+[$C](.+)[$J]/ and print $$1 and exit' < debian/changelog)
+RELEASE:=${PACKAGE}_${VERSION}_${ARCH}.deb
 
-build: noperlbrew deps
-	@echo "Make sure to have no perlbrew-installed libs in perl5/!"
-	@makedpkg
+# show configuration
+info:
+	@echo "Release: $(RELEASE)"
+	@echo "Depends: $(DEPENDS)"
 
-test:
-	@perl -I$(LIB) $(CARTON) exec -- prove -Ilib t
+version:
+	@perl -p -i -e 's/^our\s+\$$VERSION\s*=.*/our \$$VERSION="$(VERSION)";/' $(MAINSRC)
+	@perl -p -i -e 's/^our\s+\$$NAME\s*=.*/our \$$NAME="$(PACKAGE)";/' $(MAINSRC)
 
-debug:
-	@perl -I$(LIB) $(CARTON) exec -- perl5/bin/plackup -R lib -r $(APP)
+# build documentation
+PANDOC = $(shell which pandoc)
+ifeq ($(PANDOC),)
+  PANDOC = $(error pandoc is required but not installed)
+endif
 
-start:
-	@perl -I$(LIB) $(CARTON) exec -- perl5/bin/starman $(APP)
+debian/$(PACKAGE).1: README.md $(CONTROL)
+	@grep -v '^\[!' $< | $(PANDOC) -s -t man -o $@ \
+		-M title="$(shell echo $(PACKAGE) | tr a-z A-Z)(1) Manual" -o $@
 
-noperlbrew:
-	@if [ "$$PERLBREW_PERL" ]; then\
-	 	echo "please switch off perlbrew for build!" ;\
-		exit 1 ;\
-	fi
+# build Debian package
+deb: debian/$(PACKAGE).1 version tests
+	dpkg-buildpackage -b -us -uc -rfakeroot
+	mv ../$(PACKAGE)_$(VERSION)_*.deb .
 
-clean:
-	@rm -rf debuild cache
+# install required toolchain and Debian packages
+dependencies:
+	apt-get install fakeroot dpkg-dev
+	apt-get install pandoc libghc-citeproc-hs-data 
+	apt-get install $(DEPENDS)
 
-purge: clean
-	@rm -rf perl5
+# install required Perl packages
+local: cpanfile
+	cpanm -l local --skip-satisfied --no-man-pages --notest --installdeps .
 
-.PHONY: doc deps build test start noperlbrew update
+# run locally
+run: local
+	plackup -Ilib -r app.psgi
 
-doc:
-	@cd ../doc; make html pdf
-
+tests: local
+	prove -Ilocal/lib/perl5 -l -v
