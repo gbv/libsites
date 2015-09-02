@@ -1,0 +1,3 @@
+#!/usr/bin/perl
+use Libsites::Update::ZDB;
+Libsites::Update::ZDB->new->update(@ARGV);

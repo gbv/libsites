@@ -1,5 +1,5 @@
 #!/bin/bash
 
 cd /srv/libsites
-make update
+perl -Ilib -Ilocal/lib/perl5 bin/update
 

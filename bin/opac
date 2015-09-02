@@ -1,0 +1,3 @@
+#!/usr/bin/perl
+use Libsites::Update::OPAC;
+Libsites::Update::OPAC->new->update(@ARGV);

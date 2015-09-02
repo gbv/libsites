@@ -1,0 +1,3 @@
+#!/usr/bin/perl
+use Libsites::Update::Sites;
+Libsites::Update::Sites->new->update(@ARGV);

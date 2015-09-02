@@ -1,6 +1,31 @@
 #!/usr/bin/perl
-use v5.14.1;
+use v5.14;
+use Cwd;
 
-foreach (@ARGV) {
-    system("./bin/getopac.pl $_");
-}
+use Libsites::Update;
+my $update = Libsites::Update->new;
+$update->{info}->(system("date -Is"));
+
+my $cwd = cwd;
+use Libsites::Update::Webhook;
+Libsites::Update::Webhook->new->update;
+chdir $cwd;
+
+use Libsites::Update::ISIL;
+Libsites::Update::ISIL->new->update;
+
+use Libsites::Update::Sites;
+Libsites::Update::Sites->new->update;
+
+use Libsites::Update::ZDB;
+Libsites::Update::ZDB->new->update;
+
+use Libsites::Update::OPAC;
+Libsites::Update::OPAC->new->update;
+
+# TODO: create dump
+# create RDF dump file
+# find isil -regextype sed -regex ".*\.\(ttl\|nt\)$" | \
+#    perl -I$LIBSITES/local/lib/perl5 -I$LIBSITES/lib $LIBSITES/bin/dump \
+#    > libsites.ttl
+

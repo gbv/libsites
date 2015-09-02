@@ -2,44 +2,7 @@ package GBV::App::GetISIL;
 use v5.14.2;
 
 use base 'Exporter';
-our @EXPORT = qw(getisil getlod serializettl);
-
-use File::Path qw(make_path);
-use File::Slurp qw(write_file);
-
-sub getisil(@) {
-    my %files = @_;
-
-    die "missing directory libsites-config/isil/\n" unless -d 'libsites-config/isil';
-
-    foreach my $isil (@ARGV) {
-        if ($isil !~ qr{^[a-zA-Z0-9:/-]+$}) {
-            say STDERR "invalid ISIL: $isil";
-            next;
-        }
-
-        foreach my $file (keys %files) {
-            my ($data, $message) = $files{$file}->($isil);
-
-            if (!defined $data) { 
-                $message ||= "failed";
-                say STDERR "$isil/$file: $message";
-                next;
-            }
-    
-            my $path = "libsites-config/isil/$isil";
-            make_path $path;
-            unless( -d $path ) {
-                say STDERR "couldn't create $path: $@";
-                next;
-            }
-      
-            $file = "$path/$file";
-            write_file( $file, $data );
-            say "$file: " . ($message || "retrieved");
-        }
-    }
-}
+our @EXPORT = qw(getlod serializettl);
 
 use RDF::Trine::Model;
 use RDF::Trine::Parser;

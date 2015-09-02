@@ -1,7 +1,7 @@
 package GBV::App::Libsites;
 
 use v5.14.2;
-use experimental qw(smartmatch);
+no warnings 'experimental::smartmatch';
 
 use parent 'Plack::Component';
 use Plack::Util::Accessor qw(config isil app tt);
@@ -19,13 +19,17 @@ use RDF::NS;
 use RDF::Lazy;
 use constant NS => RDF::NS->new();
 
-sub prepare_app {
+sub prepare_app { # sub BUILD
     my ($self) = @_;
 
+    # TODO: 'with
     for ($ENV{LIBSITES_CONFIG}, './libsites-config', '/etc/libsites') {
         $self->config($_);
         last if -d $_;
     }
+
+    my $isildir = $self->config . '/isil';
+    mkdir $isildir unless -d $isildir;
 
     my $tt = Plack::Middleware::TemplateToolkit->new( 
         INCLUDE_PATH => 'public',
@@ -62,7 +66,7 @@ sub prepare_app {
             };
         builder {
             mount '/source' => Plack::App::Directory::Template->new(
-                    root => $self->config . '/isil',
+                    root         => $isildir,
                     VARIABLES    => { base => '../../' }, # TODO: dynamic
                     templates    => 'public',
                     INTERPOLATE  => 1, 
@@ -92,7 +96,7 @@ sub prepare_app {
                     }
                 };
                 Plack::App::RDF::Files->new( 
-                    base_dir => $self->config . '/' . 'isil',
+                    base_dir => $isildir,
                     base_uri => 'http://uri.gbv.de/organization/isil/',
                     path_map => sub { $_ = shift; $_ =~ s/\@.+$//; $_ },
                     normalize => 'NFC',

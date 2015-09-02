@@ -6,16 +6,16 @@ use Plack::Util::Load;
 use HTTP::Request::Common;
 use JSON;
 
+plan skip_all => 'whitebox test' if $ENV{TEST_URL};
+
 $ENV{LIBSITES_CONFIG} = 't/config';
 
-my $app = load_app( $ENV{TEST_URL} || 'app.psgi');
+my $app = load_app('app.psgi');
 
 test_psgi $app, sub {
     my $cb = shift;
-    my $res = $cb->(GET '/');
-    is $res->code, 200, 'HTTP response OK at /';
 
-    $res = $cb->(GET "/isil/DE-Ilm1");
+    my $res = $cb->(GET "/isil/DE-Ilm1");
     is $res->code, 200, 'found DE-Ilm1';
 
     $res = $cb->(GET "/isil/DE-Ilm1?format=json");

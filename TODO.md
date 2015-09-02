@@ -1,7 +1,4 @@
-* Debian-Paket bauen
-
 * Automatisches Update
-
     * falls sich eine Datei geändert hat
             Parser
     * cronjob?

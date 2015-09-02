@@ -1,25 +1,35 @@
 language: bash
 sudo: required
-before_install:
-  - sudo make dependencies
-install:
-  - sudo chown -R travis:travis /home/travis/.cpanm
-  - make local-libs
-script:
-  - export PACKAGE=`perl -ne 'print $1 if /^Package:\s+(.+)/;' < debian/control`
-  - export TEST_URL=app.psgi
-  - prove -l -Ilocal/lib/perl5 -v
-  - make release-file
-  - sudo dpkg -i ${PACKAGE}_*.deb
-  - sudo service ${PACKAGE} status
-  - sudo service ${PACKAGE} restart
-  - export TEST_URL=deployed
-  - prove -l -v
 cache: apt
-after_failure:
-  - tail -200 /var/log/${PACKAGE}/error.log
-  - tail -200 /var/log/${PACKAGE}/access.log
-  - curl -i http://localhost:6013/ 
+
+# we don't use docker but this triggers travis-ci to provide Ubuntu 14.04
+services:
+    - docker
+before_install:
+    - lsb_release -a
+    - sudo apt-get update -qq
+install:
+    - sudo make dependencies
+    - make local
+script:
+    # make test and create Debian package
+    - make package
+    # locally install package
+    - sudo dpkg -i libsites_*.deb
+    - sudo service libsites status
+    # test against localhost
+    - export TEST_URL=6013
+    - prove -Ilib -Ilocal/lib/perl5 -v
+
+# Release Debian package via GitHub releases on tagged commits
 before_deploy:
-  - export RELEASE_PKG_FILE=$(ls *.deb)
-  - echo "deploying $RELEASE_PKG_FILE"
+    - export RELEASE_FILE=$(ls *.deb)
+    - echo "deploying $RELEASE_FILE to GitHub releases"
+deploy:
+    provider: releases
+    api_key:
+        secure: o9F+7dLe2rsjfn+OtHlUi7ARJFahtq59XMr6ah0KXcdCUe6Smq3qJTbBKxKUhqWkTTXESUTw89Dn2rbUreQmZFb3thpP8mvwQIHjSTsViP2Gp8HIgvhYdm1oCnQJSSUYJ1czJbOf2c4N65VICx0iaOLqT8egRTZsJhEewHpaIEo=
+    file_glob: true
+    file: "${RELEASE_FILE}"
+    on:
+        tags: true

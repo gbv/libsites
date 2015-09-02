@@ -15,5 +15,9 @@ doc/libsites.pdf
 doc/libsites.html
 doc/libsites.tmp
 
-libsites_*.changes
 libsites_*.deb
+
+t/config/isil/*
+t/config/isil/DE-ABCDE/*
+!t/config/isil/DE-ABCDE
+!t/config/isil/DE-ABCDE/sites.txt

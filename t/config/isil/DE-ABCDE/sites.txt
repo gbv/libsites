@@ -1,0 +1,21 @@
+@
+Main Library
+an
+# ignore
+address
+http://example.org/
+some
+comment
+
+@0
+
+contact@example.org
+52.134268, 9.974501
+Mo-Fr 9:00-21:00, Sa 10:00-16:00
+Vorlesungsfreie Zeit: Mo-Fr 9:00-18:00
++49-5121-883260
+
+@longname
+Long name (= short name)
+
+ISIL DE-123

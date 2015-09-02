@@ -26,6 +26,13 @@ case "$1" in
             mkdir /etc/$PACKAGE
         fi
 
+        # Add git remote to config directory
+        if [ ! -d /etc/$PACKAGE/.git ]; then
+            cd /etc/$PACKAGE
+            git init
+            git remote add origin https://github.com/gbv/libsites-config.git
+        fi
+
         # Make sure user owns his directories
         chown -R $PACKAGE:$PACKAGE /srv/$PACKAGE
         chown -R $PACKAGE:$PACKAGE /var/log/$PACKAGE
@@ -33,6 +40,10 @@ case "$1" in
 
         # Install web application as service
         update-rc.d -f $PACKAGE defaults
+
+        # run update script
+        echo "Running /etc/libsites update script"
+        sudo -u libsites /etc/cron.daily/libsites
 
         # (re)start service
         service $PACKAGE restart
