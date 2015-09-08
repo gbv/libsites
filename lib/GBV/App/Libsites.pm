@@ -19,6 +19,8 @@ use RDF::NS;
 use RDF::Lazy;
 use constant NS => RDF::NS->new();
 
+our $VERSION='0.2.0';
+
 sub prepare_app { # sub BUILD
     my ($self) = @_;
 
