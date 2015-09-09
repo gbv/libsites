@@ -4,6 +4,7 @@ use v5.14;
 use Moo;
 extends 'Libsites::Update';
 
+use Libsites::Update::Sites;
 use Plack::App::GitHub::WebHook;
 use GitHub::WebHook::Clone;
 use Cwd qw(cwd);
@@ -23,9 +24,13 @@ sub to_app {
 
 #    my $cur = cwd;
     my $app = Plack::App::GitHub::WebHook->new(
+        access => 'all',
         hook => [ 
             $self->clone_hook,
-            # TODO: update-config (first chdir into curdir!)
+            sub {
+                chdir $self->configdir;
+                Libsites::Update::Sites->new->update;
+            }
         ]
     );
 
