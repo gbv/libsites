@@ -19,15 +19,13 @@ based distributions *might* work too. Releases can be found at
 <https://github.com/gbv/libsites/releases>
 
 To install required dependencies either use a package manager such as `gdebi`,
-manually install dependencies (inspectable via `dpkg -I cocoda_db_*.deb`), or
-try to force installation of after failed install:
+manually install dependencies (inspectable via `dpkg -I libsites_*.deb`):
 
     sudo dpkg -i ...                         # install dependencies
-    sudo dpkg -i libsites_X.Y.Z_amd64.deb   # change X.Y.Z
-    sudo apt-get -f install                  # repair
+    sudo dpkg -i libsites_X.Y.Z_amd64.deb    # change X.Y.Z
 
 After installation the service is available at localhost on port 6013. Better
-put the service behind a reverse proxy to enable SSL and nice URLs.
+put the service behind a reverse proxy to enable SSL and nice URLs!
 
 # ADMINISTRATION
 
@@ -49,7 +47,7 @@ GitHub Webhook an den URL-Pfad `/update`. Der Verlauf des Update-Skripts wird
 in `/var/log/libsites/update.log` festgehalten. Zur Not kann das Update auch
 manuell angestoßen werden:
 
-    sudo su -u libsites /etc/cron.daily/update
+    sudo -u libsites /etc/cron.daily/libsites
 
 ## Logging
 
