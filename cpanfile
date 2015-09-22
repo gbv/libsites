@@ -32,5 +32,6 @@ requires 'Git::Repository';
 requires 'JSON';        
 requires 'Log::Contextual', '0.006000';
 
+# test requirements
 test_requires 'Plack::Util::Load';
 test_requires 'Test::Fatal';

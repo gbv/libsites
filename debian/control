@@ -38,4 +38,4 @@ Depends: git,
  libyaml-libyaml-perl,
  libc6,
  libhtml-parser-perl
-Description: VZG-Standortverwaltung
+Description: GBV-Standortverzeichnis

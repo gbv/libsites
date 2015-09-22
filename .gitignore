@@ -1,21 +1,18 @@
 data/
 local/
-release/
 libsites-config
 
-debian/files
-debian/*.debhelper.log
-debian/*.postinst.debhelper
-debian/*.postrm.debhelper
-debian/*.prerm.debhelper
+debian/*.log
+debian/*.debhelper
 debian/*.substvars
+debian/files
 debian/*/
 
 doc/libsites.pdf
 doc/libsites.html
 doc/libsites.tmp
 
-libsites_*.deb
+*.deb
 
 t/config/isil/*
 t/config/isil/DE-ABCDE/*
