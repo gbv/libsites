@@ -1,9 +1,84 @@
 .TH "LIBSITES" "1" "" "Manual" ""
-.SH GBV\-Standortverzeichnis (libsites)
+.SH NAME
 .PP
-Dieses git\-Repository enthält eine Webanwendung zum Betrieb des
-GBV\-Standortverzeichnis.
-Die eigentlichen informationen zu Standorten von Bibliotheken, Museen
-und verwandten Einrichtungen sowie Skripte zur Aggregation dieser
-Informationen befinden sich dagegen im Repository
-libsites\-config (https://github.com/gbv/libsites-config).
+libsites \- GBV\-Standortverzeichnis
+.SH SYNOPSIS
+.PP
+The application is automatically started as service, listening on port
+6013
+.IP
+.nf
+\f[C]
+sudo\ service\ libsites\ {status|start|stop|restart}
+\f[]
+.fi
+.SH DESCRIPTION
+.PP
+libsites implements an RDF\-based web registry of library locations.
+.SH INSTALLATION
+.PP
+The software is released as Debian package for Ubuntu 14.04 LTS.
+Other Debian based distributions \f[I]might\f[] work too.
+Releases can be found at <https://github.com/gbv/libsites/releases>
+.PP
+To install required dependencies either use a package manager such as
+\f[C]gdebi\f[], manually install dependencies (inspectable via
+\f[C]dpkg\ \-I\ libsites_*.deb\f[]):
+.IP
+.nf
+\f[C]
+sudo\ dpkg\ \-i\ ...\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ #\ install\ dependencies
+sudo\ dpkg\ \-i\ libsites_X.Y.Z_amd64.deb\ \ \ \ #\ change\ X.Y.Z
+\f[]
+.fi
+.PP
+After installation the service is available at localhost on port 6013.
+Better put the service behind a reverse proxy to enable SSL and nice
+URLs!
+.SH ADMINISTRATION
+.SS Configuration
+.PP
+Config file \f[C]/etc/default/libsites\f[] only contains basic server
+configuration in form of simple key\-values pairs:
+.IP \[bu] 2
+\f[C]PORT\f[] \- port number (required, 6013 by default)
+.IP \[bu] 2
+\f[C]WORKERS\f[] \- number of parallel connections (required, 5 by
+default).
+.PP
+The actual content is retrieved from the German ISIL directory (hosted
+by ZDB) and the git repository <https://github.com/gbv/libsites-config>.
+.SS Updates of content
+.PP
+Ein Update läuft täglich sowie (ohne ZDB\-Update) bei Benachrichtigung
+per GitHub Webhook an den URL\-Pfad \f[C]/update\f[].
+Der Verlauf des Update\-Skripts wird in
+\f[C]/var/log/libsites/update.log\f[] festgehalten.
+Zur Not kann das Update auch manuell angestoßen werden:
+.IP
+.nf
+\f[C]
+sudo\ \-u\ libsites\ /etc/cron.daily/libsites
+\f[]
+.fi
+.SS Logging
+.PP
+Log files are written in \f[C]/var/log/libsites/\f[] and kept for 30 day
+by default:
+.IP \[bu] 2
+\f[C]access.log\f[] \- HTTP request and responses in Apache Log Format
+.IP \[bu] 2
+\f[C]server.log\f[] \- Web server messages (when server was started and
+stopped)
+.IP \[bu] 2
+\f[C]update.log\f[] \- Update script output
+.SH SEE ALSO
+.PP
+The source code of libsites is managed in a public git repository at
+<https://github.com/gbv/libsites>.
+Please report bugs and feature request at
+<https://github.com/gbv/libsites/issues>!
+.PP
+The Changelog is located in file \f[C]debian/changelog\f[].
+.PP
+Development guidelines are given in file \f[C]CONTRIBUTING.md\f[].
