@@ -27,21 +27,29 @@ ifeq ($(PANDOC),)
   PANDOC = $(error pandoc is required but not installed)
 endif
 
+docs: README.md manpage
+	cd doc; make $(PACKAGE).pdf
+
 manpage: debian/$(PACKAGE).1
 debian/$(PACKAGE).1: README.md $(CONTROL)
-	@grep -v '^\[!' $< | $(PANDOC) -s -t man -o $@ \
-		-M title="$(shell echo $(PACKAGE) | tr a-z A-Z)(1) Manual" -o $@
+	@echo "%$(PACKAGE)(1)" Manual | tr a-z A-Z > tmp.md
+	@echo "# NAME" >> tmp.md
+	@echo "libsites - GBV Standortverzeichnis" >> tmp.md
+	@echo >> tmp.md
+	@grep -v '^\[!' $< >> tmp.md
+	@cat tmp.md | $(PANDOC) -s -t man -o $@
+	@rm tmp.md
 
 # build Debian package
-package: debian/$(PACKAGE).1 version tests
+package: manpage version tests
 	dpkg-buildpackage -b -us -uc -rfakeroot
 	mv ../$(PACKAGE)_$(VERSION)_*.deb .
 
 # install required toolchain and Debian packages
 dependencies:
-	apt-get install fakeroot dpkg-dev debhelper
-	apt-get install pandoc libghc-citeproc-hs-data 
-	apt-get install $(DEPENDS)
+	apt-get -y install fakeroot dpkg-dev debhelper
+	apt-get -y install pandoc libghc-citeproc-hs-data
+	apt-get -y install $(DEPENDS)
 
 # install required Perl packages
 local: cpanfile
@@ -57,6 +65,4 @@ code:
 
 # run tests
 tests: local
-	# remove test artifacts and run all tests
-	git ls-files --others t/ | xargs rm -f
 	PLACK_ENV=tests prove -Ilocal/lib/perl5 -l -v

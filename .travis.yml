@@ -21,6 +21,9 @@ script:
     - export TEST_URL=6013
     - prove -Ilib -Ilocal/lib/perl5 -v
 
+after_failure:
+    - tail -200 /var/log/libsites/error.log
+
 # Release Debian package via GitHub releases on tagged commits
 before_deploy:
     - export RELEASE_FILE=$(ls *.deb)
@@ -29,7 +32,8 @@ deploy:
     provider: releases
     api_key:
       secure: DuRR6ex4f/UrhMqWUWvMVh0Hu/PYVDQcOjcsj1J1DkqS16DseSUa3ReflSs4QAJ0zFTX3UonaVIAaQXA5nj3MdL5A6tAA0xPTvjFbDcbkb/ka1L9wFOCOUq1aMHK23zFAH6MD1BNmgoeQbgFu8mStukYWDkwp+crOriCoooA6Qw=
-    file_glob: true
-    file: "${RELEASE_FILE}"
+    file: 
+        - "${RELEASE_FILE}"
+        - doc/libsites.pdf
     on:
         tags: true
