@@ -36,7 +36,7 @@ sub prepare_app { # sub BUILD
     my $tt = Plack::Middleware::TemplateToolkit->new( 
         INCLUDE_PATH => 'public',
         INTERPOLATE  => 1, 
-        VARIABLES    => { base => './' },
+        VARIABLES    => { base => './', version => $VERSION },
         vars         => { formats => [qw(ttl rdfxml nt json)] },
         404          => '404.html', 
         500          => '500.html',
