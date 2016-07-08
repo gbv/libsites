@@ -27,6 +27,11 @@ manually install dependencies (inspectable via `dpkg -I libsites_*.deb`):
 After installation the service is available at localhost on port 6013. Better
 put the service behind a reverse proxy to enable SSL and nice URLs!
 
+The installation does not trigger running the daily cronjob to update from
+libsites-config and ZDB, so you may need to manually run it after installation:
+
+    sudo -u libsites /etc/cron.daily/libsites
+
 # ADMINISTRATION
 
 ## Configuration

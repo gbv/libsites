@@ -41,9 +41,9 @@ case "$1" in
         # Install web application as service
         update-rc.d -f $PACKAGE defaults
 
-        # run update script
-        echo "Running /etc/libsites update script"
-        sudo -u libsites /etc/cron.daily/libsites
+        # don't run update script
+        echo "You may need to manually run /etc/libsites update script:"
+        echo "$ sudo -u libsites /etc/cron.daily/libsites"
 
         # (re)start service
         service $PACKAGE restart
