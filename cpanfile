@@ -17,7 +17,7 @@ requires 'Plack::App::RDF::Files', '0.12';
 
 # Catmandu modules
 requires 'Catmandu', '0.94';            # libcatmandu-perl
-requires 'Catmandu::RDF', '0.23';
+requires 'Catmandu::RDF', '0.31';
 
 requires 'RDF::TriN3'; # TODO: move requirement to Catmandu::RDF
 
