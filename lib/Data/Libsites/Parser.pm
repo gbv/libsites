@@ -40,12 +40,12 @@ sub parse_id {
     my ($self, $line) = @_;
 
     return if !defined $line or $line eq '' or $line !~ qr{^
-        ((ISIL\ )?([A-Z]{1,4}-[A-Za-z0-9/:-]+))?
+        ((ISIL\s+)?([A-Z]{1,4}-[A-Za-z0-9/:-]+))?
         (\@([a-z0-9]*))? $}x;
 
     my %id;
 
-    return unless $2 or $4;
+    return unless $3 or $4;
 
     if ($3) {
         $id{isil} = $3;
