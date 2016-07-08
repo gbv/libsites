@@ -32,8 +32,9 @@ deploy:
     provider: releases
     api_key:
       secure: DuRR6ex4f/UrhMqWUWvMVh0Hu/PYVDQcOjcsj1J1DkqS16DseSUa3ReflSs4QAJ0zFTX3UonaVIAaQXA5nj3MdL5A6tAA0xPTvjFbDcbkb/ka1L9wFOCOUq1aMHK23zFAH6MD1BNmgoeQbgFu8mStukYWDkwp+crOriCoooA6Qw=
+    skip_cleanup: true
     file: 
         - "${RELEASE_FILE}"
-        - doc/libsites.pdf
+#        - doc/libsites.pdf
     on:
         tags: true

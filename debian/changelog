@@ -1,3 +1,10 @@
+libsites (0.2.2) unstable; urgency=medium
+
+  * Fixed ZDB RDF and sites.txt conversion
+  * Some refactoring
+
+ -- Jakob Voß <jakob.voss@gbv.de>  Fri, 08 Jul 2016 19:38:05 +0200
+
 libsites (0.2.1) unstable; urgency=medium
 
   * Allow GitHub webhooks from anywhere
