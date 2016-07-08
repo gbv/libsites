@@ -15,15 +15,16 @@ sub update_isildir {
     
     my $isil = basename($dir);
     my $uri    = "http://ld.zdb-services.de/resource/organisations/$isil";
+    my $url    = "http://ld.zdb-services.de/data/organisations/$isil.ttl";
     my $gbvuri = "http://uri.gbv.de/organization/isil/$isil";
-    my $file   = "$dir/zdb.nt";
+    my $file   = "$dir/zdb.ttl";
 
-    my $exporter = exporter('RDF', type => 'ntriples', file => $file);
+    my $exporter = exporter('RDF', type => 'turtle', file => $file);
 
     # TODO: don't die on 404 not found
     try {
         importer('RDF', 
-            url => $uri, 
+            url => $url, 
             triples => 1, 
             predicate_map => 1,
             fix => [sub {
@@ -39,9 +40,9 @@ sub update_isildir {
 
         $exporter->add({ _id => $uri, owl_sameAs => $gbvuri });
         $exporter->commit;
-        $self->{info}->("$uri - $file");
+        $self->{info}->("$url - $file");
     } catch {
-        $self->{warn}->("$uri - $file failed");
+        $self->{warn}->("$url - $file failed");
     };
 }
 

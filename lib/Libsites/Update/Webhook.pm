@@ -22,7 +22,6 @@ has clone_hook => (
 sub to_app {
     my $self = shift;
 
-#    my $cur = cwd;
     my $app = Plack::App::GitHub::WebHook->new(
         access => 'all',
         hook => [ 

@@ -48,6 +48,7 @@ Relevant source code is located in
     * `libsites.default` - default config file 
       (only installed with first installation)
     * `install` - lists which files to install
+    * `libsites.cron.daily` - runs daily to update /etc/libsites
 * `cpanfile` - lists required Perl modules
 * `public/` - static HTML/CSS/JS/... files
 * `bin/` - utility scripts

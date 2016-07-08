@@ -4,33 +4,33 @@ use Moo;
 
 extends 'Libsites::Update';
 
-# Holt RDF-Daten zu Katalogen von http://uri.gbv.de/database/
-# get corresponding OPAC data via LOD
+# get corresponding OPAC data via http://uri.gbv.de/database/
 
-use GBV::App::GetISIL;
 use File::Basename;
-use File::Slurp qw(write_file);
+use Catmandu -all;
+use Try::Tiny;
 
 sub update_isildir {
     my ($self, $dir) = @_;
 
-    my $isil = basename($dir);
-    my $file = "$dir/opac.ttl";
-
+    my $isil  = basename($dir);
     my $dbkey = "opac-". lc($isil);
+    my $url   = "http://uri.gbv.de/database/$dbkey?format=ttl";
+    my $file  = "$dir/opac.ttl";
 
-    my ($rdf, $msg) = getlod( "http://uri.gbv.de/database/$dbkey?format=ttl" );
+    my $exporter = exporter('RDF', type => 'turtle', file => $file);
 
-    if ($rdf) {
-        my $ttl = serializettl( $rdf );
-        $msg = "retrieved ".$rdf->size." triples";
-    } else {
-        $self->{error}->("$file: ".($msg || 'failed'));
-        return;
-    }
-
-    write_file($file, $rdf);
-    $self->{info}->("$file: " . ($msg || "retrieved"));
+    try {
+        importer('RDF', 
+            url => $url, 
+            triples => 1, 
+            predicate_map => 1,
+        )->each( sub { $exporter->add($_[0]) } ); 
+        $exporter->commit;
+        $self->{info}->("$url - $file");
+    } catch {
+        $self->{warn}->("$url - $file failed");
+    };
 }
 
 1;

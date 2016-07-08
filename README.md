@@ -28,9 +28,7 @@ After installation the service is available at localhost on port 6013. Better
 put the service behind a reverse proxy to enable SSL and nice URLs!
 
 The installation does not trigger running the daily cronjob to update from
-libsites-config and ZDB, so you may need to manually run it after installation:
-
-    sudo -u libsites /etc/cron.daily/libsites
+libsites-config and ZDB, so you may need to manually run as described below.
 
 # ADMINISTRATION
 
@@ -47,12 +45,13 @@ and the git repository <https://github.com/gbv/libsites-config>.
 
 ## Updates of content
 
-Ein Update läuft täglich sowie (ohne ZDB-Update) bei Benachrichtigung per
-GitHub Webhook an den URL-Pfad `/update`. Der Verlauf des Update-Skripts wird
-in `/var/log/libsites/update.log` festgehalten. Zur Not kann das Update auch
-manuell angestoßen werden:
+A full update is run daily and logged to `/var/log/libsites/update.log`. At URL
+path `/update` there is also a GitHub Webhook to trigger update from configuration
+repository `libsites-config`. The update script can be run manually as following:
 
-    sudo -u libsites /etc/cron.daily/libsites
+    sudo -u libsites /etc/cron.daily/libsites all
+
+Remove the parameter `all` for usage help.
 
 ## Logging
 

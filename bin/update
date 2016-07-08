@@ -1,27 +1,59 @@
 #!/usr/bin/perl
 use v5.14;
 use Cwd;
+use Pod::Usage;
+
+my @tasks = qw(webhook isil sites zdb opac);
+
+sub want {
+    my $task = shift;
+    return grep { $_ eq $task } @tasks
+}
+
+pod2usage(1) unless @ARGV;
+
+# explicitly ask for tasks and optional parameters
+if ($ARGV[0] eq 'all') {
+    shift @ARGV;
+} else {
+    my @explicit = ();
+    push @explicit, shift @ARGV while want($ARGV[0]);
+    @tasks = @explicit;
+} 
 
 use Libsites::Update;
 my $update = Libsites::Update->new;
-$update->{info}->(system("date -Is"));
+my @isils = map { -d $_ ? $_ : $update->configdir . "/isil/$_" } @ARGV;
+$update->{info}->(join ' ', 'update', @tasks, @isils);
+$update->{info}->(`date -Is`);
 
-my $cwd = cwd;
-use Libsites::Update::Webhook;
-Libsites::Update::Webhook->new->update;
-chdir $cwd;
 
-use Libsites::Update::ISIL;
-Libsites::Update::ISIL->new->update;
+if (want('webhook')) {
+    my $cwd = cwd;
+    use Libsites::Update::Webhook;
+    Libsites::Update::Webhook->new->update;
+    chdir $cwd;
+}
 
-use Libsites::Update::Sites;
-Libsites::Update::Sites->new->update;
+if (want('isil')) {
+    use Libsites::Update::ISIL;
+    Libsites::Update::ISIL->new->update(@isils);
+}
 
-use Libsites::Update::ZDB;
-Libsites::Update::ZDB->new->update;
+if (want('sites')) {
+    use Libsites::Update::Sites;
+    Libsites::Update::Sites->new->update(@isils);
+}
 
-use Libsites::Update::OPAC;
-Libsites::Update::OPAC->new->update;
+if (want('zdb')) {
+    use Libsites::Update::ZDB;
+    Libsites::Update::ZDB->new->update(@isils);
+}
+
+if (want('opac')) {
+    use Libsites::Update::OPAC;
+    Libsites::Update::OPAC->new->update(@isils);
+}
 
 # TODO: create dump
 # create RDF dump file
@@ -29,3 +61,14 @@ Libsites::Update::OPAC->new->update;
 #    perl -I$LIBSITES/local/lib/perl5 -I$LIBSITES/lib $LIBSITES/bin/dump \
 #    > libsites.ttl
 
+=head1 NAME 
+
+update - Update /etc/libsites
+
+=head1 USAGE
+
+update all [ISILDIR]+
+
+update (webhook|isil|sites|zdb|opac)+ [ISILDIR]+
+
+=cut
