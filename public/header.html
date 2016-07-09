@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
  <head> 
-  [% base = request.base.remove('/$') %]
   [% IF uri AND NOT title ; title = uri.foaf_name; END %]
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
   <title>VZG-Standortverzeichnis[% IF title %]: [% title | html %][% END %]</title>

@@ -19,7 +19,7 @@ use RDF::NS;
 use RDF::Lazy;
 use constant NS => RDF::NS->new();
 
-our $VERSION="0.2.2";
+our $VERSION="0.2.3";
 
 sub prepare_app { # sub BUILD
     my ($self) = @_;
@@ -36,7 +36,7 @@ sub prepare_app { # sub BUILD
     my $tt = Plack::Middleware::TemplateToolkit->new( 
         INCLUDE_PATH => 'public',
         INTERPOLATE  => 1, 
-        VARIABLES    => { base => './', version => $VERSION },
+        VARIABLES    => { base => '.', version => $VERSION },
         vars         => { formats => [qw(ttl rdfxml nt json)] },
         404          => '404.html', 
         500          => '500.html',
@@ -67,14 +67,6 @@ sub prepare_app { # sub BUILD
                 _      => { charset => 'utf-8', }
             };
         builder {
-            mount '/source' => Plack::App::Directory::Template->new(
-                    root         => $isildir,
-                    VARIABLES    => { base => '../../' }, # TODO: dynamic
-                    templates    => 'public',
-                    INTERPOLATE  => 1, 
-                    PRE_PROCESS  => 'header.html',
-                    POST_PROCESS => 'footer.html',
-                );
             mount '/isil' => builder {
                 enable_if { $_[0]->{'negotiate.format'} eq 'html' } sub {
                     my ($app) = @_;
@@ -122,7 +114,7 @@ sub call_html {
     $env->{'tt.vars'}->{javascript} = [ 'OpenLayers.js' ];
     add_env_sources($env, $uri);
     $env->{'tt.path'} = '/organization.html';   
-    $env->{'tt.vars'}{base} = '../';
+    $env->{'tt.vars'}{base} = '..';
 
     $self->tt->call($env);
 }

@@ -1,3 +1,9 @@
+libsites (0.2.3) unstable; urgency=medium
+
+  * Adjust location of CSS and JS files
+
+ -- Jakob Voß <jakob.voss@gbv.de>  Sat, 09 Jul 2016 10:35:42 +0200
+
 libsites (0.2.2) unstable; urgency=medium
 
   * Fixed ZDB RDF and sites.txt conversion
