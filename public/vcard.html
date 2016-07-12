@@ -4,17 +4,18 @@
 
 [% IF vcard.vcard_adr OR vcard.gbv_address %]
  <h3>Adresse</h3>
- <p itemprop="address">
-   [% SET adr = vcard.vcard_adr %]
-   [% IF adr %] 
+ [% IF vcard.vcard_ard %]
+   [% FOR adr IN vcard.vcard_adr %]
+   <p itemprop="address">
      [% adr.rel('vcard_street-address') %]<br/>
      [% adr.rel('vcard_postal-code') %]
      [% SET country = adr.rel('vcard_country-name') %]
      [% adr.vcard_locality %][% IF country %]$country[% END %]
-   [% ELSE %]
-     [% uri.gbv_address | html_line_break %]
+   </p>
    [% END %]
- </p>
+ [% ELSE %]
+   [% uri.gbv_address | html_line_break %]
+ [% END %]
  [% IF emails.size %]
    <p itemprop="email">
      [% FOREACH e IN emails %]

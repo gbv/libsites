@@ -29,11 +29,7 @@
     <p><em>[% uri.dc_description %]</em></p>
    [% END %]
 
-   [% IF uri.hcterms_hasCard %]
-     [% INCLUDE vcard.html vcard=uri.hcterms_hasCard %]
-   [% ELSE %]
-     [% INCLUDE vcard.html vcard=uri %]
-   [% END %]
+   [% INCLUDE vcard.html vcard=uri %]
 
    [% IF uri.gbv_openinghours %]
    <h3>Öffnungszeiten</h3>
