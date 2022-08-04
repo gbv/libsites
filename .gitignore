@@ -2,18 +2,6 @@ data/
 local/
 libsites-config
 
-debian/*.log
-debian/*.debhelper
-debian/*.substvars
-debian/files
-debian/*/
-
-doc/libsites.pdf
-doc/libsites.html
-doc/libsites.tmp
-
-*.deb
-
 t/config/isil/*
 t/config/isil/DE-ABCDE/*
 !t/config/isil/DE-ABCDE

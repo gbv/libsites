@@ -14,15 +14,26 @@ libsites implements an RDF-based web registry of library locations.
 
 # INSTALLATION
 
-The software is released as Debian package for Ubuntu 14.04 LTS. Other Debian
-based distributions *might* work too. Releases can be found at
-<https://github.com/gbv/libsites/releases>
+Create user `libsites`:
 
-To install required dependencies either use a package manager such as `gdebi`,
-manually install dependencies (inspectable via `dpkg -I libsites_*.deb`):
+    sudo adduser --home /srv/libsites --disabled-password libsites
 
-    sudo dpkg -i ...                         # install dependencies
-    sudo dpkg -i libsites_X.Y.Z_amd64.deb    # change X.Y.Z
+Install dependencies:
+
+    sudo apt-get install git libcatmandu-perl librdf-trine-perl libgit-repository-perl liblog-contextual-perl starman 
+
+Clone this repository as user `libsites` in `/srv/libsites`
+
+    sudo -iu libsites
+
+    git clone --bare https://github.com/gbv/libsites.git .git
+    git config --unset core.bare
+
+Locally install Perl libraries
+
+    make local
+
+*...additional steps...*
 
 After installation the service is available at localhost on port 6013. Better
 put the service behind a reverse proxy to enable SSL and nice URLs!
