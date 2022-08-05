@@ -14,9 +14,11 @@ libsites implements an RDF-based web registry of library locations.
 
 # INSTALLATION
 
-Create user `libsites`:
+Create user `libsites` and directories:
 
     sudo adduser --home /srv/libsites --disabled-password libsites
+    sudo mkdir /etc/libsites /var/log/libsites
+    sudo chown libsites:libsites /etc/libsites /var/log/libsites
 
 Install dependencies:
 
@@ -28,12 +30,29 @@ Clone this repository as user `libsites` in `/srv/libsites`
 
     git clone --bare https://github.com/gbv/libsites.git .git
     git config --unset core.bare
+    git checkout .
+
+    git clone https://github.com/gbv/libsites-config.git /etc/libsites
+    ln -s /etc/libsites libsites-config
 
 Locally install Perl libraries
 
     make local
 
-*...additional steps...*
+The actual content is retrieved from the German ISIL directory (hosted by ZDB)
+and the git repository <https://github.com/gbv/libsites-config> among other sources.
+
+Initally update data of libraries (will take a while):
+
+    perl -Ilib -Ilocal/lib/perl5 bin/update all
+
+Add a cronjob (`crontab -e`) to daily update the data, e.g.
+
+    10 03 * * * perl -Ilib -Ilocal/lib/perl5 bin/update all
+
+Switch back to root and enable the service by copying `libsites.init` to `/etc/init.d/libsites` and update runlevel directories with `update-rc.d foo defaults`. then start the service
+
+    
 
 After installation the service is available at localhost on port 6013. Better
 put the service behind a reverse proxy to enable SSL and nice URLs!
@@ -43,24 +62,13 @@ libsites-config and ZDB, so you may need to manually run as described below.
 
 # ADMINISTRATION
 
-## Configuration
-
-Config file `/etc/default/libsites` only contains basic server configuration
-in form of simple key-values pairs:
-
-* `PORT`    - port number (required, 6013 by default)
-* `WORKERS` - number of parallel connections (required, 5 by default).
-
-The actual content is retrieved from the German ISIL directory (hosted by ZDB)
-and the git repository <https://github.com/gbv/libsites-config>.
-
 ## Updates of content
 
 A full update is run daily and logged to `/var/log/libsites/update.log`. At URL
 path `/update` there is also a GitHub Webhook to trigger update from configuration
 repository `libsites-config`. The update script can be run manually as following:
 
-    sudo -u libsites /etc/cron.daily/libsites all
+    cd /srv/libsites && sudo -u libsites perl -Ilib -Ilocal/lib/perl5 bin/update all
 
 Remove the parameter `all` for usage help.
 
@@ -77,8 +85,3 @@ Log files are written in `/var/log/libsites/` and kept for 30 day by default:
 The source code of libsites is managed in a public git repository at
 <https://github.com/gbv/libsites>. Please report bugs and feature request at
 <https://github.com/gbv/libsites/issues>!
-
-The Changelog is located in file `debian/changelog`.
-
-Development guidelines are given in file `CONTRIBUTING.md`.
-
