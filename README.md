@@ -50,15 +50,14 @@ Add a cronjob (`crontab -e`) to daily update the data, e.g.
 
     10 03 * * * perl -Ilib -Ilocal/lib/perl5 bin/update all
 
-Switch back to root and enable the service by copying `libsites.init` to `/etc/init.d/libsites` and update runlevel directories with `update-rc.d foo defaults`. then start the service
+Switch back to root and enable the service by copying `libsites.init` to `/etc/init.d/libsites` and update runlevel directories with `update-rc.d libsites defaults`. then start the service
 
-    
+    sudo cp /srv/libsites/libsites.init /etc/init.d/libsites
+    sudo update-rc.d libsites defaults
+    sudo service libsites start
 
 After installation the service is available at localhost on port 6013. Better
 put the service behind a reverse proxy to enable SSL and nice URLs!
-
-The installation does not trigger running the daily cronjob to update from
-libsites-config and ZDB, so you may need to manually run as described below.
 
 # ADMINISTRATION
 
