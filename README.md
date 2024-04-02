@@ -37,7 +37,7 @@ Clone this repository as user `libsites` in `/srv/libsites`
 
 Locally install Perl libraries
 
-    make local
+    make -B local
 
 The actual content is retrieved from the German ISIL directory (hosted by ZDB)
 and the git repository <https://github.com/gbv/libsites-config> among other sources.
